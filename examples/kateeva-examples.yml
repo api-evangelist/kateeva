@@ -1,0 +1,159 @@
+generated: '2026-08-23'
+method: probed
+source: live requests against https://kateeva.com/wp-json/ on 2026-08-23
+description: >-
+  Working request/response examples captured live. Every value below was returned by the API — no
+  example is synthesized. All requests are anonymous; no credential is needed. Responses are
+  trimmed with the `_fields` parameter where the full record is large.
+base_url: https://kateeva.com/wp-json
+examples:
+- name: List the newsroom categories with their post counts
+  operation: listCategories
+  spec: openapi/kateeva-taxonomy-api-openapi.yml
+  request: 'GET /wp/v2/categories?per_page=20&_fields=id,name,slug,count,parent'
+  http_status: 200
+  response:
+  - {id: 9, name: Press releases, slug: press-releases, count: 53, parent: 0}
+  - {id: 11, name: In the news, slug: in-the-news, count: 71, parent: 0}
+  - {id: 13, name: Kateeva Blog, slug: kateeva-blog, count: 19, parent: 0}
+  - {id: 14, name: Spotlight on People, slug: spotlight-on-people, count: 10, parent: 13}
+  - {id: 15, name: Spotlight on Technology, slug: spotlight-on-technology, count: 11, parent: 13}
+  - {id: 16, name: Spotlight on Business, slug: spotlight-on-business, count: 5, parent: 13}
+  - {id: 12, name: Events, slug: events, count: 3, parent: 0}
+  - {id: 1, name: Uncategorized, slug: uncategorized, count: 1, parent: 0}
+  note: >-
+    This is the map an agent needs before anything else — the category ids are the filter values
+    for the posts collection, and the three Spotlight categories are children of Kateeva Blog.
+- name: List the three most recent press releases
+  operation: listPosts
+  spec: openapi/kateeva-posts-api-openapi.yml
+  request: 'GET /wp/v2/posts?categories=9&per_page=3&_fields=id,date,slug,link,title'
+  http_status: 200
+  response_headers: {X-WP-Total: '53', X-WP-TotalPages: '18'}
+  response_excerpt:
+  - {id: 3314, date: '2024-07-01T02:15:31', slug: a-conversation-with-kateeva-ceo-bin-liu, title: 'A Conversation with Kateeva CEO, Bin Liu'}
+  - {id: 3288, date: '2024-05-13T23:07:26', slug: kateeva-cto-emeritus-steven-van-slyke-honored-for-his-co-invention-of-the-oled-device-2, title: 'Kateeva CTO Emeritus, Steven Van Slyke, Honored for his Co-Invention of the OLED Device'}
+  - {id: 3108, date: '2022-10-31T23:58:13', slug: kateeva-appoints-bin-liu-as-chief-executive-officer, title: Kateeva Appoints Bin Liu as Chief Executive Officer}
+  note: >-
+    `title` is an object, {"rendered": "..."}, on every post-type resource; flattened here for
+    readability. The most recent press release is dated 2024-07-01 — the archive is not current.
+- name: Read the tag vocabulary
+  operation: listTags
+  spec: openapi/kateeva-taxonomy-api-openapi.yml
+  request: 'GET /wp/v2/tags?per_page=30&_fields=id,name,slug,count'
+  http_status: 200
+  response_excerpt:
+  - {id: 47, name: kateeva, slug: kateeva, count: 5}
+  - {id: 56, name: inkjet printing, slug: inkjet-printing, count: 3}
+  - {id: 48, name: OLED displays, slug: oled-displays, count: 3}
+  - {id: 44, name: inkjet printers, slug: inkjet-printers, count: 2}
+  - {id: 46, name: manufacturing equipment, slug: manufacturing-equipment, count: 2}
+  - {id: 45, name: displays, slug: displays, count: 2}
+  - {id: 54, name: 1/2 Gen 6 OLED displays, slug: 1-2-gen-6-oled-displays, count: 1}
+  - {id: 61, name: G8.5 displays, slug: g8-5-displays, count: 1}
+  - {id: 62, name: 8K TV displays, slug: 8k-tv-displays, count: 1}
+  - {id: 51, name: Tianma, slug: tianma, count: 1}
+  note: >-
+    26 tags, and several carry count 0 (Facility, Operations, Printing, Manufacturing,
+    "mannufacturing equipment" — a typo term). The vocabulary is only lightly applied: 152 posts
+    carry 26 tags with a maximum count of 5, so tags are not a reliable retrieval axis on this
+    surface. Use categories.
+- name: Cross-content search for the flagship platform
+  operation: searchContent
+  spec: openapi/kateeva-search-api-openapi.yml
+  request: 'GET /wp/v2/search?search=YIELDjet&per_page=3'
+  http_status: 200
+  response_excerpt:
+  - {id: 413, title: 'YIELDjet® Platform', url: 'https://kateeva.com/solutions/technology/yieldjet-platform/', type: post, subtype: page}
+  - {id: 1630, title: Kateeva Receives Order from Tianma for Yieldjet Inkjet Printing System for OLED Display R&D, url: 'https://kateeva.com/kateeva-receives-order-from-tianma-for-yieldjet-inkjet-printing-system-for-oled-display-rd/', type: post, subtype: post}
+  note: >-
+    `type` is always "post" on this endpoint; `subtype` is the field that tells you which
+    collection to dereference against — page 413 lives at /wp/v2/pages/413.
+- name: Walk the page hierarchy
+  operation: listPages
+  spec: openapi/kateeva-pages-api-openapi.yml
+  request: 'GET /wp/v2/pages?per_page=5&_fields=id,slug,parent,link&orderby=id&order=asc'
+  http_status: 200
+  response:
+  - {id: 3, slug: privacy-policy, link: 'https://kateeva.com/privacy-policy/', parent: 0}
+  - {id: 6, slug: home, link: 'https://kateeva.com/', parent: 0}
+  - {id: 11, slug: about, link: 'https://kateeva.com/company/about/', parent: 95}
+  - {id: 93, slug: overview, link: 'https://kateeva.com/company/about/overview/', parent: 11}
+  - {id: 95, slug: company, link: 'https://kateeva.com/company/', parent: 0}
+  note: >-
+    The `parent` chain reconstructs the site tree. Note that `content.rendered` is empty for these
+    pages — kateeva.com renders page bodies client-side with Vue, so the Pages API gives you the
+    structure and the SEO API gives you the meaning.
+- name: List media with source URLs
+  operation: listMedia
+  spec: openapi/kateeva-media-api-openapi.yml
+  request: 'GET /wp/v2/media?per_page=2&_fields=id,slug,mime_type,source_url'
+  http_status: 200
+  response:
+  - {id: 3320, slug: jinyi, mime_type: image/png, source_url: 'https://kateeva.com/wp-content/uploads/2024/09/JinYi.png'}
+  - {id: 3315, slug: picture1-2, mime_type: image/jpeg, source_url: 'https://kateeva.com/wp-content/uploads/2024/07/Picture1.jpg'}
+  note: >-
+    236 attachments. Requesting a dotted sub-field such as media_details.width in `_fields` is
+    silently dropped — ask for `media_details` whole if you need the size variants.
+- name: Get oEmbed metadata for a page
+  operation: getOEmbed
+  spec: openapi/kateeva-oembed-api-openapi.yml
+  request: 'GET /oembed/1.0/embed?url=https%3A%2F%2Fkateeva.com%2Fsolutions%2Ftechnology%2Fyieldjet-platform%2F'
+  http_status: 200
+  response_excerpt:
+    version: '1.0'
+    provider_name: Kateeva
+    provider_url: https://kateeva.com
+    author_name: dev
+    title: YIELDjet® Platform - Kateeva
+    type: rich
+    width: 600
+    height: 338
+  note: >-
+    Returns an iframe embed with a per-request `secret`. `author_name` is the WordPress account
+    name ("dev"), not a person — do not attribute content to it.
+- name: Get the structured-data view of a page
+  operation: getSeoHead
+  spec: openapi/kateeva-seo-api-openapi.yml
+  request: 'GET /yoast/v1/get_head?url=https%3A%2F%2Fkateeva.com%2Fsolutions%2Fproducts%2F'
+  http_status: 200
+  note: >-
+    Returns the rendered <head> markup plus the parsed schema.org @graph for the URL. On this site
+    it is the highest-value endpoint: the marketing pages are Vue-rendered and serve an empty shell
+    to a crawler, so the SEO head is the only machine-readable description of what each page is
+    about.
+- name: Trim a response with _fields
+  operation: listPosts
+  spec: openapi/kateeva-posts-api-openapi.yml
+  request: 'GET /wp/v2/posts?per_page=2&_fields=id,date,slug,link,title'
+  http_status: 200
+  note: >-
+    465 bytes, against 10,847 bytes for the same two records unfiltered. Always send _fields.
+- name: Read the route index
+  operation: getRouteIndex
+  spec: openapi/kateeva-discovery-api-openapi.yml
+  request: 'GET /'
+  http_status: 200
+  response_excerpt:
+    name: Kateeva
+    url: https://kateeva.com
+    namespaces: [oembed/1.0, wpml/v1, contact-form-7/v1, cookieyes/v1, redirection/v1, yoast/v1, wpml/tm/v1, wpml/ate/v1, wpml/st/v1, filebird/v1, filebird/public/v1, wp-rocket/v1, otgs/installer/v1, mailpoet/v1, wp/v2, wp-site-health/v1, wp-block-editor/v1]
+    routes: 271
+    authentication: {application-passwords: {endpoints: {authorization: 'https://kateeva.com/wp-admin/authorize-application.php'}}}
+  note: >-
+    272KB unfiltered — the single largest response on the surface. Most of the 271 routes are
+    plugin admin routes that return 401/403 anonymously; the 21 operations documented in openapi/
+    are the ones that actually answer.
+error_examples:
+- name: per_page above the bound
+  request: 'GET /wp/v2/posts?per_page=999'
+  http_status: 400
+  response: '{"code":"rest_invalid_param","message":"Invalid parameter(s): per_page","data":{"status":400,"params":{"per_page":"per_page must be between 1 (inclusive) and 100 (inclusive)"}}}'
+- name: unknown route
+  request: 'GET /wp/v2/nope'
+  http_status: 404
+  response: '{"code":"rest_no_route","message":"No route was found matching the URL and request method.","data":{"status":404}}'
+- name: privileged read
+  request: 'GET /wp/v2/settings'
+  http_status: 401
+  response: '{"code":"rest_forbidden","message":"Sorry, you are not allowed to do that.","data":{"status":401}}'

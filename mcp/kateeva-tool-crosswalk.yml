@@ -1,0 +1,167 @@
+generated: '2026-08-23'
+method: derived
+source: mcp/kateeva-mcp.yml + openapi/
+description: 'Binding between the candidate MCP tool set and the OpenAPI operations that back it. Both sides of
+  this crosswalk are API Evangelist artifacts — Kateeva operates no MCP server and publishes no OpenAPI — so there
+  is no provider surface divergence to record. The useful finding is the coverage block: 21 of the 271 routes the
+  live host registers are documented here, and the other 250 are plugin administrative routes that return 401/403
+  to an anonymous caller.'
+surfaces:
+  openapi:
+    files: 8
+    operations: 21
+    gated: false
+    note: Derived from the server's own route index and OPTIONS schema documents; anonymously readable.
+  mcp:
+    url: null
+    gated: null
+    note: No server exists. tools/list was never reachable to introspect; the tool set is candidate.
+  graphql:
+    endpoint: null
+    note: No GraphQL surface. /graphql returned 404 and no graphql route appears in the 271-route index.
+coverage:
+  tools_named: 21
+  tools_bound: 21
+  tools_unbound: 0
+  mcp_only: 0
+  rest_ops_total: 21
+  rest_ops_with_tool: 21
+  live_routes_on_host: 271
+  live_routes_documented: 21
+  binding_confidence: high
+crosswalk:
+- tool: list_posts
+  category: content
+  rest:
+  - listPosts
+  binding: rest
+  confidence: high
+- tool: get_post
+  category: content
+  rest:
+  - getPost
+  binding: rest
+  confidence: high
+- tool: list_pages
+  category: content
+  rest:
+  - listPages
+  binding: rest
+  confidence: high
+- tool: get_page
+  category: content
+  rest:
+  - getPage
+  binding: rest
+  confidence: high
+- tool: list_media
+  category: media
+  rest:
+  - listMedia
+  binding: rest
+  confidence: high
+- tool: get_media_item
+  category: media
+  rest:
+  - getMediaItem
+  binding: rest
+  confidence: high
+- tool: list_categories
+  category: taxonomy
+  rest:
+  - listCategories
+  binding: rest
+  confidence: high
+- tool: get_category
+  category: taxonomy
+  rest:
+  - getCategory
+  binding: rest
+  confidence: high
+- tool: list_tags
+  category: taxonomy
+  rest:
+  - listTags
+  binding: rest
+  confidence: high
+- tool: get_tag
+  category: taxonomy
+  rest:
+  - getTag
+  binding: rest
+  confidence: high
+- tool: search_site
+  category: search
+  rest:
+  - searchContent
+  binding: rest
+  confidence: high
+- tool: get_route_index
+  category: discovery
+  rest:
+  - getRouteIndex
+  binding: rest
+  confidence: high
+- tool: list_types
+  category: discovery
+  rest:
+  - listTypes
+  binding: rest
+  confidence: high
+- tool: list_taxonomies
+  category: discovery
+  rest:
+  - listTaxonomies
+  binding: rest
+  confidence: high
+- tool: list_statuses
+  category: discovery
+  rest:
+  - listStatuses
+  binding: rest
+  confidence: high
+- tool: list_users
+  category: discovery
+  rest:
+  - listUsers
+  binding: rest
+  confidence: high
+- tool: get_user
+  category: discovery
+  rest:
+  - getUser
+  binding: rest
+  confidence: high
+- tool: list_comments
+  category: discovery
+  rest:
+  - listComments
+  binding: rest
+  confidence: high
+- tool: get_comment
+  category: discovery
+  rest:
+  - getComment
+  binding: rest
+  confidence: high
+- tool: get_oembed
+  category: metadata
+  rest:
+  - getOEmbed
+  binding: rest
+  confidence: high
+- tool: get_seo_head
+  category: metadata
+  rest:
+  - getSeoHead
+  binding: rest
+  confidence: high
+mcp_only: []
+rest_only: []
+undocumented_live_routes:
+  count: 250
+  note: The route index registers 271 routes across 17 namespaces. The 250 not documented here belong to plugin
+    administrative namespaces (wpml, filebird, mailpoet, redirection, wp-rocket, cookieyes, contact-form-7, otgs/installer,
+    wp-site-health, wp-block-editor, and the Yoast admin routes) and return 401 or 403 to an anonymous caller. Verified
+    on contact-form-7/v1/contact-forms (403) and wp/v2/settings (401). They are deliberately excluded rather than
+    silently dropped.

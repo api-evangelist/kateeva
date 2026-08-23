@@ -1,0 +1,121 @@
+generated: '2026-08-23'
+method: derived
+status: candidate
+source: openapi/ (21 operations across 8 derived specs)
+description: Kateeva operates no MCP server. Searched the site, the 271-route index, mcp.kateeva.com (NXDOMAIN),
+  https://kateeva.com/mcp (404), /.well-known/mcp.json (404) and the npm registry on 2026-08-23 and found none.
+  The tool list below is a CANDIDATE derived one-to-one from the OpenAPI operations this repo harvested — it is
+  what an MCP server over this surface would expose, not something Kateeva publishes. Every tool is read-only because
+  the whole anonymous surface is read-only.
+deployment:
+  mode: none
+  endpoint: null
+  install: null
+  package: null
+  auth: none
+  verified: derived
+  note: 'No remote endpoint and no stdio package exist. mode: none is a recorded absence — nothing here should be
+    read as an agent surface Kateeva ships. An endpoint URL is deliberately NOT guessed.'
+server:
+  name: kateeva
+  transport: http
+  url: null
+  published: false
+auth:
+  required: false
+  note: All listed tools would work anonymously over plain HTTPS.
+tools:
+- name: list_posts
+  description: List Kateeva newsroom posts — press releases, in-the-news coverage, events and blog articles
+  category: content
+  source_operation: openapi/kateeva-posts-api-openapi.yml#listPosts
+- name: get_post
+  description: Retrieve a single newsroom post by id
+  category: content
+  source_operation: openapi/kateeva-posts-api-openapi.yml#getPost
+- name: list_pages
+  description: List the static company, solutions, careers and policy pages
+  category: content
+  source_operation: openapi/kateeva-pages-api-openapi.yml#listPages
+- name: get_page
+  description: Retrieve a single page by id
+  category: content
+  source_operation: openapi/kateeva-pages-api-openapi.yml#getPage
+- name: list_media
+  description: List media library attachments — product photography and press assets
+  category: media
+  source_operation: openapi/kateeva-media-api-openapi.yml#listMedia
+- name: get_media_item
+  description: Retrieve a single media attachment by id
+  category: media
+  source_operation: openapi/kateeva-media-api-openapi.yml#getMediaItem
+- name: list_categories
+  description: List newsroom categories with post counts
+  category: taxonomy
+  source_operation: openapi/kateeva-taxonomy-api-openapi.yml#listCategories
+- name: get_category
+  description: Retrieve a category by id
+  category: taxonomy
+  source_operation: openapi/kateeva-taxonomy-api-openapi.yml#getCategory
+- name: list_tags
+  description: List newsroom tags
+  category: taxonomy
+  source_operation: openapi/kateeva-taxonomy-api-openapi.yml#listTags
+- name: get_tag
+  description: Retrieve a tag by id
+  category: taxonomy
+  source_operation: openapi/kateeva-taxonomy-api-openapi.yml#getTag
+- name: search_site
+  description: Cross-content search over posts and pages
+  category: search
+  source_operation: openapi/kateeva-search-api-openapi.yml#searchContent
+- name: get_route_index
+  description: Retrieve the self-describing API route index
+  category: discovery
+  source_operation: openapi/kateeva-discovery-api-openapi.yml#getRouteIndex
+- name: list_types
+  description: List registered content types
+  category: discovery
+  source_operation: openapi/kateeva-discovery-api-openapi.yml#listTypes
+- name: list_taxonomies
+  description: List registered taxonomies
+  category: discovery
+  source_operation: openapi/kateeva-discovery-api-openapi.yml#listTaxonomies
+- name: list_statuses
+  description: List publication statuses
+  category: discovery
+  source_operation: openapi/kateeva-discovery-api-openapi.yml#listStatuses
+- name: list_users
+  description: List public author records
+  category: discovery
+  source_operation: openapi/kateeva-discovery-api-openapi.yml#listUsers
+- name: get_user
+  description: Retrieve a public author record by id
+  category: discovery
+  source_operation: openapi/kateeva-discovery-api-openapi.yml#getUser
+- name: list_comments
+  description: List comments
+  category: discovery
+  source_operation: openapi/kateeva-discovery-api-openapi.yml#listComments
+- name: get_comment
+  description: Retrieve a comment by id
+  category: discovery
+  source_operation: openapi/kateeva-discovery-api-openapi.yml#getComment
+- name: get_oembed
+  description: Get oEmbed rich metadata for a kateeva.com URL
+  category: metadata
+  source_operation: openapi/kateeva-oembed-api-openapi.yml#getOEmbed
+- name: get_seo_head
+  description: Get rendered SEO head metadata and the schema.org JSON-LD graph for a kateeva.com URL
+  category: metadata
+  source_operation: openapi/kateeva-seo-api-openapi.yml#getSeoHead
+probes:
+- url: https://kateeva.com/mcp
+  http_status: 404
+- url: https://kateeva.com/.well-known/mcp.json
+  http_status: 404
+- host: mcp.kateeva.com
+  dns: NXDOMAIN
+- url: https://registry.npmjs.org/-/v1/search?text=kateeva
+  http_status: 200
+  finding: 0 packages

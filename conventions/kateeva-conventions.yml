@@ -1,0 +1,152 @@
+generated: '2026-08-23'
+method: probed
+source: live responses from https://kateeva.com/wp-json/ + openapi/ derived parameters
+description: >-
+  Cross-cutting request/response semantics for the WordPress REST content API behind kateeva.com.
+  Kateeva publishes no API documentation, so every convention below was read off live responses and
+  the server's own route index and OPTIONS schema documents on 2026-08-23, or is the documented
+  WordPress core behaviour the surface inherits.
+authentication:
+  style: none for reads
+  detail: >-
+    Anonymous read. No key, token or account. Writes require a WordPress application password
+    (Basic over TLS) that has no public issuance path.
+  artifact: authentication/kateeva-authentication.yml
+idempotency:
+  supported: false
+  idempotency_key_header: null
+  detail: >-
+    There is no idempotency contract. No Idempotency-Key header, parameter or replay window is
+    accepted or documented anywhere on this surface. The public operations are all GET and are
+    therefore idempotent by HTTP method semantics alone, which is not the same thing as an
+    idempotency guarantee for retried writes.
+reversibility:
+  applicable: false
+  grade: na
+  detail: >-
+    The public surface is read-only. Every one of the 21 documented operations is a GET, and the
+    collection responses carry `Allow: GET` to anonymous callers, so there is no write an agent can
+    perform and therefore nothing to reverse. Cancel, refund, void, undo, rollback and restore are
+    all absent because the actions they would reverse are absent. The write methods that exist on
+    the same routes (POST/PUT/DELETE on wp/v2 collections) are gated behind a WordPress application
+    password with no public issuance path; WordPress core does place a deleted post in the trash
+    with a `force=false` default, which is a restore path, but Kateeva publishes no retention
+    window for it and it is unreachable without staff credentials, so no window is asserted here.
+  write_surfaces: []
+  reversal_operations: []
+  na_reason: read-only-api
+pagination:
+  style: page-number with offset alternative
+  params:
+    page: 1-based page number. Default 1.
+    per_page: Records per page. Default 10, minimum 1, maximum 100 — exceeding it returns 400 rest_invalid_param.
+    offset: Alternative to page; skip N records.
+    order: asc or desc.
+    orderby: Sort field; varies per resource (date, id, title, slug, relevance, include, modified, ...).
+  response_headers:
+    X-WP-Total: Total records matching the query.
+    X-WP-TotalPages: Total pages available at the current per_page.
+    Link: RFC 8288 rel="next" / rel="prev" links.
+  detail: >-
+    Verified live: GET /wp/v2/posts?per_page=2 returned X-WP-Total 152, X-WP-TotalPages 76 and a
+    Link header carrying rel="next". Both counter headers are listed in
+    Access-Control-Expose-Headers, so they are readable from a browser.
+  cursor: false
+field_selection:
+  supported: true
+  params:
+    _fields: Comma-separated allowlist of top-level response fields — a real sparse-fieldset control.
+    _embed: Inline embeddable linked resources (author, featured media, terms) under _embedded.
+    _links: HAL-style link relations are present on every record by default.
+  detail: >-
+    Verified live on this surface: GET /wp/v2/posts?per_page=2 returns roughly 11KB unfiltered,
+    while the same call with _fields=id,date,slug,link,title returns 465 bytes. On a 152-post
+    archive that is the difference between one request and twenty.
+filtering:
+  detail: >-
+    Per-resource query parameters are declared in the OPTIONS document for each route and carried
+    into the derived OpenAPI. Common across post types: search, slug, include, exclude, after,
+    before, modified_after, modified_before, status, categories, tags, order, orderby.
+  taxonomy_filters:
+  - 'GET /wp/v2/posts?categories=9   # Press releases (53)'
+  - 'GET /wp/v2/posts?categories=11  # In the news (71)'
+  - 'GET /wp/v2/posts?categories=13  # Kateeva Blog (19)'
+  - 'GET /wp/v2/posts?tags=<id>'
+context_parameter:
+  param: context
+  values: [view, embed, edit]
+  default: view
+  detail: >-
+    `view` is the full public record, `embed` a trimmed subset for embedding. `edit` requires
+    authentication and returns 401 anonymously. Field visibility per context is declared in each
+    property of the published schemas.
+request_tracing:
+  request_id_header: null
+  detail: >-
+    No correlation or request-id header is returned. There is nothing to quote in a support ticket,
+    and no support channel for the API either.
+versioning:
+  scheme: uri-path namespace
+  current: wp/v2
+  detail: >-
+    The version is a namespace segment in the path. 17 namespaces are registered at capture
+    (wp/v2, oembed/1.0, yoast/v1, wpml/v1, wpml/tm/v1, wpml/ate/v1, wpml/st/v1, contact-form-7/v1,
+    cookieyes/v1, redirection/v1, filebird/v1, filebird/public/v1, wp-rocket/v1, otgs/installer/v1,
+    mailpoet/v1, wp-site-health/v1, wp-block-editor/v1). Kateeva publishes no versioning or
+    deprecation policy of its own; the version moves when the site's WordPress core and plugins are
+    upgraded, with no announcement.
+  artifact: lifecycle/kateeva-lifecycle.yml
+error_envelope:
+  format: wp-rest-error
+  rfc9457: false
+  shape: '{code, message, data:{status, params?, details?}}'
+  detail: Match on `code`, never on `message`. Full catalog in errors/kateeva-problem-types.yml.
+  artifact: errors/kateeva-problem-types.yml
+rate_limiting:
+  documented: false
+  response_headers: []
+  detail: >-
+    No RateLimit-*, X-RateLimit-* or Retry-After header appeared on any observed response, and no
+    limits are published. An agent has no runtime signal here and must self-throttle.
+  artifact: rate-limits/kateeva-rate-limits.yml
+caching:
+  observed_headers:
+    Cache-Control: max-age=0
+    Vary: Origin,Accept-Encoding
+  detail: >-
+    Observed on GET /wp/v2/posts. `max-age=0` tells every cache to revalidate, so reads are fresh;
+    unlike many WordPress hosts there is no long s-maxage edge window on this surface. No ETag or
+    Last-Modified was returned, so conditional requests are not available and a poller cannot avoid
+    re-transferring an unchanged collection.
+  conditional_requests: false
+cors:
+  access_control_allow_origin: reflected
+  access_control_expose_headers: [X-WP-Total, X-WP-TotalPages, Link]
+  access_control_allow_headers: [Authorization, X-WP-Nonce, Content-Disposition, Content-MD5, Content-Type]
+  detail: >-
+    Verified live: a request carrying `Origin: https://example.com` came back with
+    `Access-Control-Allow-Origin: https://example.com` and `Vary: Origin`. The surface reflects any
+    origin, which is WordPress core's default and is safe here only because the public surface is
+    anonymous and read-only.
+indexing:
+  x_robots_tag: noindex
+  detail: >-
+    Every API response carries `X-Robots-Tag: noindex`. The data is public and machine-readable but
+    the provider signals it should not be indexed as content.
+content_type:
+  request: application/json
+  response: application/json; charset=UTF-8
+server:
+  software: Apache
+  detail: Origin identifies as Apache. No CDN cache header (x-cache, cf-cache-status) was observed.
+evidence:
+- url: https://kateeva.com/wp-json/wp/v2/posts?per_page=2
+  http_status: 200
+  headers_observed: [x-wp-total, x-wp-totalpages, link, allow, cache-control, x-robots-tag, access-control-expose-headers, access-control-allow-headers, access-control-allow-origin, vary, server]
+- url: https://kateeva.com/wp-json/wp/v2/posts?per_page=999
+  http_status: 400
+- url: https://kateeva.com/wp-json/wp/v2/posts?per_page=2&_fields=id,date,slug,link,title
+  http_status: 200
+  finding: 465 bytes vs 10847 bytes unfiltered — _fields is honoured.
+- url: https://kateeva.com/wp-json/
+  http_status: 200

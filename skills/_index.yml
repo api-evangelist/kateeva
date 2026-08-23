@@ -1,0 +1,18 @@
+generated: '2026-08-23'
+method: generated
+source: openapi/ (operationIds verified against the derived specs)
+note: >-
+  Kateeva publishes no AGENTS.md, no skills and no agent guidance — searched the site, the 29-page
+  site map and the 271-route index on 2026-08-23. These two skills are API Evangelist-authored
+  operating instructions grounded in real operationIds from the specs in openapi/, which were
+  themselves derived from the server's own published route index and OPTIONS schemas. Both flows
+  are read-only and anonymous.
+skills:
+- file: kateeva-read-newsroom-archive.md
+  name: Read the Kateeva newsroom archive
+  api: openapi/kateeva-posts-api-openapi.yml
+  operations: [searchContent, listCategories, listPosts, getPost, listTags, getSeoHead]
+- file: kateeva-map-company-and-products.md
+  name: Map the Kateeva site, products and company facts
+  api: openapi/kateeva-pages-api-openapi.yml
+  operations: [listPages, getPage, getSeoHead, getOEmbed, searchContent, getPost, listMedia]

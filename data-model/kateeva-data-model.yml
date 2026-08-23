@@ -1,0 +1,155 @@
+generated: '2026-08-23'
+method: derived
+source: openapi/*.yml component schemas ($ref links + id-reference fields) read from the live WordPress OPTIONS documents
+description: >-
+  Entity-relationship graph for the WordPress REST content API behind kateeva.com, derived from the
+  component schemas in the eight OpenAPI documents in openapi/. Kateeva publishes no object
+  reference, so relationships were read from the id-reference fields the server itself declares
+  (author, featured_media, parent, categories, tags, post) rather than from documentation.
+id_scheme:
+  style: opaque integer
+  detail: >-
+    Every entity is keyed by a positive integer WordPress post/term/user ID. There are no typed id
+    prefixes, so an id is meaningless without knowing its collection — 3314 is a post, 12 is a
+    category, and nothing in the value distinguishes them. IDs are stable for the lifetime of the
+    object.
+  examples:
+  - {entity: Post, id: 3314, slug: a-conversation-with-kateeva-ceo-bin-liu}
+  - {entity: Category, id: 9, slug: press-releases}
+entities:
+- name: Post
+  collection: /wp/v2/posts
+  count_at_capture: 152
+  description: A newsroom item — press release, in-the-news link, event notice or Kateeva Blog article.
+  key_fields: [id, date, date_gmt, modified, slug, status, type, link, title, content, excerpt, author, featured_media, categories, tags]
+  spec: openapi/kateeva-posts-api-openapi.yml
+- name: Page
+  collection: /wp/v2/pages
+  count_at_capture: 29
+  description: A static site page. Hierarchical — `parent` points at another Page.
+  key_fields: [id, date, modified, slug, status, type, link, title, content, excerpt, author, featured_media, parent, menu_order]
+  spec: openapi/kateeva-pages-api-openapi.yml
+  note: >-
+    content.rendered is empty for most pages because kateeva.com renders page bodies client-side
+    with Vue. The useful fields on this entity are the hierarchy, titles, slugs, links and dates.
+- name: MediaItem
+  collection: /wp/v2/media
+  count_at_capture: 236
+  description: An attachment — product photography, facility and event imagery, headshots, press assets.
+  key_fields: [id, date, slug, type, link, title, author, media_type, mime_type, source_url, media_details, alt_text, caption, post]
+  spec: openapi/kateeva-media-api-openapi.yml
+- name: Category
+  collection: /wp/v2/categories
+  count_at_capture: 8
+  description: A hierarchical newsroom category. Kateeva uses three top-level ones plus three Kateeva Blog children.
+  key_fields: [id, count, description, link, name, slug, taxonomy, parent]
+  spec: openapi/kateeva-taxonomy-api-openapi.yml
+- name: Tag
+  collection: /wp/v2/tags
+  count_at_capture: 26
+  description: A flat newsroom tag.
+  key_fields: [id, count, description, link, name, slug, taxonomy]
+  spec: openapi/kateeva-taxonomy-api-openapi.yml
+- name: User
+  collection: /wp/v2/users
+  count_at_capture: 2
+  description: A public author record. Email and roles are withheld from anonymous callers.
+  key_fields: [id, name, url, description, link, slug, avatar_urls]
+  spec: openapi/kateeva-discovery-api-openapi.yml
+- name: Comment
+  collection: /wp/v2/comments
+  count_at_capture: 1
+  description: A comment on a post. Effectively unused on this site.
+  key_fields: [id, post, parent, author_name, date, content, link, status, type]
+  spec: openapi/kateeva-discovery-api-openapi.yml
+- name: SearchResult
+  collection: /wp/v2/search
+  count_at_capture: 181
+  description: A lightweight projection over Post and Page for cross-content search.
+  key_fields: [id, title, url, type, subtype]
+  spec: openapi/kateeva-search-api-openapi.yml
+  note: >-
+    Not a stored entity. `id` is the id of the underlying Post or Page and `subtype` names which
+    collection to dereference against.
+relationships:
+- from: Post
+  to: User
+  kind: belongs_to
+  via: author
+  detail: Post.author is a User id. Dereference with GET /wp/v2/users/{author}, or inline with ?_embed.
+- from: Post
+  to: MediaItem
+  kind: belongs_to
+  via: featured_media
+  detail: 0 means no featured image; any other value is a MediaItem id.
+- from: Post
+  to: Category
+  kind: has_many
+  via: categories
+  detail: Array of Category ids. Reverse-filter with GET /wp/v2/posts?categories={id}.
+- from: Post
+  to: Tag
+  kind: has_many
+  via: tags
+  detail: Array of Tag ids. Reverse-filter with GET /wp/v2/posts?tags={id}.
+- from: Page
+  to: Page
+  kind: belongs_to
+  via: parent
+  detail: >-
+    Self-referential hierarchy. 0 means top level. This is how the Company / Solutions / Careers
+    site tree is expressed — verified live: page 93 (overview) has parent 11 (about), and page 11 (about) has parent 95
+    (company).
+- from: Page
+  to: User
+  kind: belongs_to
+  via: author
+- from: Page
+  to: MediaItem
+  kind: belongs_to
+  via: featured_media
+- from: MediaItem
+  to: Post
+  kind: belongs_to
+  via: post
+  detail: The post or page the attachment was uploaded to. 0 for unattached library items.
+- from: MediaItem
+  to: User
+  kind: belongs_to
+  via: author
+- from: Category
+  to: Category
+  kind: belongs_to
+  via: parent
+  detail: >-
+    Verified live on this surface: Spotlight on People (10), Spotlight on Technology (11) and
+    Spotlight on Business (16) are children of Kateeva Blog (13); Press releases (9), In the news (11),
+    Events (12) and Kateeva Blog (13) are top level.
+- from: Comment
+  to: Post
+  kind: belongs_to
+  via: post
+- from: SearchResult
+  to: Post
+  kind: projects
+  via: 'id + subtype=post'
+- from: SearchResult
+  to: Page
+  kind: projects
+  via: 'id + subtype=page'
+traversal:
+  hal_links: >-
+    Every record carries a `_links` object with `self`, `collection`, `about`, `author`,
+    `wp:featuredmedia`, `wp:term` and `curies` relations. An agent can walk the graph from
+    `_links` alone without knowing the id-field names, and `?_embed` inlines the whole first hop
+    under `_embedded` in a single request.
+  note: This is the closest thing to a published object reference on this surface.
+gaps:
+- >-
+  No provider-authored object reference exists. Field semantics here are WordPress core's, read
+  from the server's own JSON Schema; anything Kateeva-specific about how it uses those fields is
+  undocumented.
+- >-
+  There are no Kateeva-domain entities on this surface at all — no product, tool, application or
+  customer object. The company's actual subject matter (YIELDjet systems, TFE, OLED RGB) exists
+  only as prose inside Post.content.

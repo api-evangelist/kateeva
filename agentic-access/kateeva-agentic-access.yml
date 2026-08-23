@@ -1,0 +1,230 @@
+generated: '2026-08-23'
+method: generated
+source: openapi/kateeva-discovery-api-openapi.yml, openapi/kateeva-media-api-openapi.yml, openapi/kateeva-oembed-api-openapi.yml,
+  openapi/kateeva-pages-api-openapi.yml, openapi/kateeva-posts-api-openapi.yml, openapi/kateeva-search-api-openapi.yml,
+  openapi/kateeva-seo-api-openapi.yml, openapi/kateeva-taxonomy-api-openapi.yml
+description: Recommended x-agentic-access execution contracts, classified from the OpenAPI. Every operation on this
+  surface is an anonymous read, so every contract is action-class connected / consequence read with no human-in-the-loop
+  requirement and no audit obligation. A governance starting point for exposing this API to AI agents — review and
+  bind audience per deployment.
+summary:
+  operations: 21
+  by_action_class:
+    connected: 21
+  by_consequence:
+    read: 21
+  human_in_the_loop_required: 0
+  note: There is no write, no purchase, no notification and no destructive operation to classify. The write methods
+    that exist on the same WordPress routes are credential-gated with no public issuance path and are therefore
+    out of scope for an agent.
+operations:
+- path: /
+  method: get
+  operationId: getRouteIndex
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /wp/v2/types
+  method: get
+  operationId: listTypes
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /wp/v2/taxonomies
+  method: get
+  operationId: listTaxonomies
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /wp/v2/statuses
+  method: get
+  operationId: listStatuses
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /wp/v2/users
+  method: get
+  operationId: listUsers
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /wp/v2/users/{id}
+  method: get
+  operationId: getUser
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /wp/v2/comments
+  method: get
+  operationId: listComments
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /wp/v2/comments/{id}
+  method: get
+  operationId: getComment
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /wp/v2/media
+  method: get
+  operationId: listMedia
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /wp/v2/media/{id}
+  method: get
+  operationId: getMediaItem
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /oembed/1.0/embed
+  method: get
+  operationId: getOEmbed
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /wp/v2/pages
+  method: get
+  operationId: listPages
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /wp/v2/pages/{id}
+  method: get
+  operationId: getPage
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /wp/v2/posts
+  method: get
+  operationId: listPosts
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /wp/v2/posts/{id}
+  method: get
+  operationId: getPost
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /wp/v2/search
+  method: get
+  operationId: searchContent
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /yoast/v1/get_head
+  method: get
+  operationId: getSeoHead
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /wp/v2/categories
+  method: get
+  operationId: listCategories
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /wp/v2/categories/{id}
+  method: get
+  operationId: getCategory
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /wp/v2/tags
+  method: get
+  operationId: listTags
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /wp/v2/tags/{id}
+  method: get
+  operationId: getTag
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none

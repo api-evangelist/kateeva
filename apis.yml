@@ -1,23 +1,346 @@
 aid: kateeva
 name: Kateeva
-description: 'Kateeva is a company surfaced via the API Evangelist harvest backlog (source: secondary-market)
-  and added to the network as a stub for full-pipeline profiling.'
+description: >-
+  Kateeva is a Silicon Valley capital-equipment company that builds inkjet printing systems for
+  manufacturing advanced displays. It was co-founded in 2008 by Conor Madigan, PhD, Valerie
+  Gassend, PhD, and Gerry Chen, PhD, on the conviction that precision inkjet deposition could make
+  OLED displays mass-producible at cost. The company introduced its YIELDjet platform in 2013 —
+  the display industry's first inkjet equipment solution for depositing the organic thin film
+  encapsulation (TFE) layer of an OLED panel — and shipped the first commercial YIELDjet FLEX
+  system a year later, which became the market-leading tool for flexible mobile OLED mass
+  production. Its current product line is the YIELDjet Lassen, Jarvis, Tioga and Kuna printers,
+  spanning substrate sizes and applications from TFE to OLED RGB pixel deposition and microlens
+  planarization. Kateeva moved its global headquarters to Newark, California in 2015 and operates
+  in China, Korea, Japan and Taiwan; it raised roughly $200 million through a 2016 Series E backed
+  by BOE, TCL Capital, Redview Capital, Samsung Venture Investment, Sigma Partners, Spark Capital,
+  Madrone Capital Partners, DBL Partners and Veeco. Kateeva sells machines to display panel
+  makers, not software: it publishes no developer program, no developer portal, no SDKs and no
+  API documentation of any kind. The only machine-readable interface it exposes is the WordPress
+  REST content API behind its corporate website at kateeva.com, which is captured here for
+  discovery purposes and is anonymously readable but read-only.
 url: https://raw.githubusercontent.com/api-evangelist/kateeva/refs/heads/main/apis.yml
+image: https://kateeva.com/wp-content/uploads/2021/10/Kateeva_Logo_RGB.svg
 x-type: company
 x-source: harvest:secondary-market
-x-tier: stub
-x-tier-reason: harvest
 specificationVersion: '0.20'
 created: '2026-08-23'
 modified: '2026-08-23'
 tags:
 - Company
-apis: []
+- Display Manufacturing
+- OLED
+- Semiconductor Equipment
+- Capital Equipment
+- Inkjet Printing
+- Thin Film Encapsulation
+- Advanced Manufacturing
+- Materials Deposition
+- Consumer Electronics
+- Hardware
+- Content
+apis:
+- aid: kateeva:kateeva-posts-api
+  name: Kateeva Posts API
+  description: >-
+    Public, unauthenticated read access to the Kateeva newsroom archive via the WordPress core REST
+    API — press releases, in-the-news coverage, event notices and the Kateeva Blog. Verified live
+    at 152 published posts.
+  humanURL: https://kateeva.com/wp-json/
+  baseURL: https://kateeva.com/wp-json
+  tags:
+  - Posts
+  - Newsroom
+  - Content
+  properties:
+  - type: OpenAPI
+    url: openapi/kateeva-posts-api-openapi.yml
+  - type: Authentication
+    url: authentication/kateeva-authentication.yml
+  - type: ErrorCatalog
+    url: errors/kateeva-problem-types.yml
+  - type: Conventions
+    url: conventions/kateeva-conventions.yml
+  - type: DataModel
+    url: data-model/kateeva-data-model.yml
+  - type: Conformance
+    url: conformance/kateeva-conformance.yml
+  - type: Lifecycle
+    url: lifecycle/kateeva-lifecycle.yml
+  - type: Overlay
+    url: overlays/kateeva-posts-api-overlay.yaml
+- aid: kateeva:kateeva-pages-api
+  name: Kateeva Pages API
+  description: >-
+    Public, unauthenticated read access to the static pages of kateeva.com — Company, About,
+    Leadership, History & Awards, Regions, Sustainability, Solutions, Technology, YIELDjet
+    Platform, Products, Applications, Collaborations, Services, Careers, Newsroom, Contact, Terms
+    of Use and Privacy Policy. Verified live at 29 published pages.
+  humanURL: https://kateeva.com/wp-json/
+  baseURL: https://kateeva.com/wp-json
+  tags:
+  - Pages
+  - Content
+  properties:
+  - type: OpenAPI
+    url: openapi/kateeva-pages-api-openapi.yml
+  - type: Authentication
+    url: authentication/kateeva-authentication.yml
+  - type: ErrorCatalog
+    url: errors/kateeva-problem-types.yml
+  - type: Conventions
+    url: conventions/kateeva-conventions.yml
+  - type: DataModel
+    url: data-model/kateeva-data-model.yml
+  - type: Conformance
+    url: conformance/kateeva-conformance.yml
+  - type: Lifecycle
+    url: lifecycle/kateeva-lifecycle.yml
+  - type: Overlay
+    url: overlays/kateeva-pages-api-overlay.yaml
+- aid: kateeva:kateeva-media-api
+  name: Kateeva Media API
+  description: >-
+    Public, unauthenticated read access to the media library behind kateeva.com — YIELDjet product
+    photography, facility and event imagery, leadership headshots and press assets with their
+    generated size variants. Verified live at 236 attachments.
+  humanURL: https://kateeva.com/wp-json/
+  baseURL: https://kateeva.com/wp-json
+  tags:
+  - Media
+  - Press Assets
+  - Content
+  properties:
+  - type: OpenAPI
+    url: openapi/kateeva-media-api-openapi.yml
+  - type: Authentication
+    url: authentication/kateeva-authentication.yml
+  - type: ErrorCatalog
+    url: errors/kateeva-problem-types.yml
+  - type: Conventions
+    url: conventions/kateeva-conventions.yml
+  - type: DataModel
+    url: data-model/kateeva-data-model.yml
+  - type: Conformance
+    url: conformance/kateeva-conformance.yml
+  - type: Lifecycle
+    url: lifecycle/kateeva-lifecycle.yml
+  - type: Overlay
+    url: overlays/kateeva-media-api-overlay.yaml
+- aid: kateeva:kateeva-taxonomy-api
+  name: Kateeva Taxonomy API
+  description: >-
+    Public, unauthenticated read access to the classification vocabularies behind the kateeva.com
+    newsroom — the eight post categories (Press releases, In the news, Kateeva Blog, Spotlight on
+    People, Spotlight on Technology, Spotlight on Business, Events, Uncategorized) and the 26 post
+    tags that cross-cut them. Verified live at 8 categories and 26 tags.
+  humanURL: https://kateeva.com/wp-json/
+  baseURL: https://kateeva.com/wp-json
+  tags:
+  - Taxonomy
+  - Content
+  properties:
+  - type: OpenAPI
+    url: openapi/kateeva-taxonomy-api-openapi.yml
+  - type: Authentication
+    url: authentication/kateeva-authentication.yml
+  - type: ErrorCatalog
+    url: errors/kateeva-problem-types.yml
+  - type: Conventions
+    url: conventions/kateeva-conventions.yml
+  - type: DataModel
+    url: data-model/kateeva-data-model.yml
+  - type: Conformance
+    url: conformance/kateeva-conformance.yml
+  - type: Lifecycle
+    url: lifecycle/kateeva-lifecycle.yml
+  - type: Overlay
+    url: overlays/kateeva-taxonomy-api-overlay.yaml
+- aid: kateeva:kateeva-search-api
+  name: Kateeva Search API
+  description: >-
+    Public, unauthenticated cross-content search over kateeva.com — the newsroom archive and the
+    static pages — returning lightweight id / title / url / type / subtype records. Verified live
+    at 181 searchable objects.
+  humanURL: https://kateeva.com/wp-json/
+  baseURL: https://kateeva.com/wp-json
+  tags:
+  - Search
+  - Content
+  properties:
+  - type: OpenAPI
+    url: openapi/kateeva-search-api-openapi.yml
+  - type: Authentication
+    url: authentication/kateeva-authentication.yml
+  - type: ErrorCatalog
+    url: errors/kateeva-problem-types.yml
+  - type: Conventions
+    url: conventions/kateeva-conventions.yml
+  - type: Conformance
+    url: conformance/kateeva-conformance.yml
+  - type: Lifecycle
+    url: lifecycle/kateeva-lifecycle.yml
+  - type: Overlay
+    url: overlays/kateeva-search-api-overlay.yaml
+- aid: kateeva:kateeva-discovery-api
+  name: Kateeva Discovery API
+  description: >-
+    Public, unauthenticated discovery metadata for kateeva.com — the self-describing route index
+    (271 routes across 17 namespaces at capture), the registered content types and taxonomies, the
+    publication statuses, the public author records and the comment surface. This is the surface
+    that makes the rest of the API machine-readable without any published documentation.
+  humanURL: https://kateeva.com/wp-json/
+  baseURL: https://kateeva.com/wp-json
+  tags:
+  - Discovery
+  - Metadata
+  properties:
+  - type: OpenAPI
+    url: openapi/kateeva-discovery-api-openapi.yml
+  - type: Authentication
+    url: authentication/kateeva-authentication.yml
+  - type: ErrorCatalog
+    url: errors/kateeva-problem-types.yml
+  - type: Conventions
+    url: conventions/kateeva-conventions.yml
+  - type: Conformance
+    url: conformance/kateeva-conformance.yml
+  - type: Lifecycle
+    url: lifecycle/kateeva-lifecycle.yml
+  - type: Overlay
+    url: overlays/kateeva-discovery-api-overlay.yaml
+- aid: kateeva:kateeva-oembed-api
+  name: Kateeva oEmbed API
+  description: >-
+    Public oEmbed 1.0 provider endpoint for kateeva.com URLs, returning embeddable rich metadata —
+    title, author, provider, thumbnail and iframe HTML — for any post or page on the site.
+  humanURL: https://kateeva.com/wp-json/
+  baseURL: https://kateeva.com/wp-json
+  tags:
+  - oEmbed
+  - Metadata
+  properties:
+  - type: OpenAPI
+    url: openapi/kateeva-oembed-api-openapi.yml
+  - type: Authentication
+    url: authentication/kateeva-authentication.yml
+  - type: ErrorCatalog
+    url: errors/kateeva-problem-types.yml
+  - type: Conventions
+    url: conventions/kateeva-conventions.yml
+  - type: Conformance
+    url: conformance/kateeva-conformance.yml
+  - type: Overlay
+    url: overlays/kateeva-oembed-api-overlay.yaml
+- aid: kateeva:kateeva-seo-api
+  name: Kateeva SEO Metadata API
+  description: >-
+    Public Yoast SEO head endpoint returning the rendered head metadata and its parsed JSON-LD
+    schema.org graph for any kateeva.com URL — a structured-data view of every page without
+    scraping the HTML. This matters more here than on a typical site, because kateeva.com renders
+    its page bodies client-side with Vue and serves an empty shell to a crawler.
+  humanURL: https://kateeva.com/wp-json/
+  baseURL: https://kateeva.com/wp-json
+  tags:
+  - SEO
+  - Metadata
+  - JSON-LD
+  properties:
+  - type: OpenAPI
+    url: openapi/kateeva-seo-api-openapi.yml
+  - type: Authentication
+    url: authentication/kateeva-authentication.yml
+  - type: ErrorCatalog
+    url: errors/kateeva-problem-types.yml
+  - type: Conventions
+    url: conventions/kateeva-conventions.yml
+  - type: Conformance
+    url: conformance/kateeva-conformance.yml
+  - type: Overlay
+    url: overlays/kateeva-seo-api-overlay.yaml
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: DomainSecurity
+  url: security/kateeva-domain-security.yml
 - type: Website
-  url: https://forgeglobal.com/kateeva_stock/
+  url: https://kateeva.com/
+- type: About
+  url: https://kateeva.com/company/about/overview/
+- type: Leadership
+  url: https://kateeva.com/company/about/leadership/
+- type: History
+  url: https://kateeva.com/company/about/history-awards/
+- type: Regions
+  url: https://kateeva.com/company/about/regions/
+- type: Sustainability
+  url: https://kateeva.com/company/sustainability/
+- type: Products
+  url: https://kateeva.com/solutions/products/
+- type: Technology
+  url: https://kateeva.com/solutions/technology/yieldjet-platform/
+- type: Applications
+  url: https://kateeva.com/solutions/applications/
+- type: Partners
+  url: https://kateeva.com/solutions/collaborations/
+- type: Services
+  url: https://kateeva.com/services/
+- type: Blog
+  url: https://kateeva.com/company/newsroom/kateeva-blog/
+- type: BlogRSS
+  url: https://kateeva.com/feed/
+- type: Press
+  url: https://kateeva.com/company/newsroom/press-releases/
+- type: News
+  url: https://kateeva.com/company/newsroom/in-the-news/
+- type: Events
+  url: https://kateeva.com/company/newsroom/events/
+- type: Contact
+  url: https://kateeva.com/contact/
+- type: Careers
+  url: https://kateeva.com/careers/job-openings/
+- type: SiteMap
+  url: https://kateeva.com/site-map/
+- type: TermsOfService
+  url: https://kateeva.com/terms-of-use/
+- type: PrivacyPolicy
+  url: https://kateeva.com/privacy-policy/
+- type: LinkedIn
+  url: https://www.linkedin.com/company/kateeva
+- type: Twitter
+  url: https://twitter.com/KateevaInc
+- type: Authentication
+  url: authentication/kateeva-authentication.yml
+- type: ErrorCatalog
+  url: errors/kateeva-problem-types.yml
+- type: Conventions
+  url: conventions/kateeva-conventions.yml
+- type: DataModel
+  url: data-model/kateeva-data-model.yml
+- type: Conformance
+  url: conformance/kateeva-conformance.yml
+- type: Lifecycle
+  url: lifecycle/kateeva-lifecycle.yml
+- type: RateLimits
+  url: rate-limits/kateeva-rate-limits.yml
+- type: Plans
+  url: plans/kateeva-plans-pricing.yml
+- type: Examples
+  url: examples/kateeva-examples.yml
+- type: LLMsTxt
+  url: llms/kateeva-llms.txt
+- type: ToolCrosswalk
+  url: mcp/kateeva-tool-crosswalk.yml
+- type: AgentSkill
+  url: skills/_index.yml
+- type: AgenticAccess
+  url: agentic-access/kateeva-agentic-access.yml
+- type: Packages
+  url: packages/kateeva-packages.yml
+x-enrichment:
+  date: '2026-08-23'
+  status: enriched
+  artifacts_added: 35
+  pass: local-v1

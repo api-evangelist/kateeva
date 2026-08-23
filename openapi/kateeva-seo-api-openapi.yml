@@ -1,0 +1,95 @@
+openapi: 3.1.0
+info:
+  title: Kateeva SEO Metadata API
+  version: wp/v2
+  description: 'Public Yoast SEO head endpoint returning the rendered head metadata and its parsed JSON-LD schema.org
+    graph for any kateeva.com URL — a structured-data view of every page without scraping the HTML. This matters
+    more here than on a typical site: kateeva.com renders its page bodies client-side with Vue, so the SEO head
+    endpoint and the content API are the only machine-readable views of the site.'
+  contact:
+    name: Kateeva
+    url: https://kateeva.com/contact/
+  x-derived-from: https://kateeva.com/wp-json/ route index + per-route HTTP OPTIONS schema documents
+  x-derived-on: '2026-08-23'
+  x-api-evangelist-note: Third-party profile. Kateeva is an OLED display manufacturing equipment maker and publishes
+    no developer program; this documents the anonymously readable WordPress REST content API behind kateeva.com.
+    Every path, parameter and schema here was read from the server's own published route index and OPTIONS documents
+    on 2026-08-23 — nothing is invented. The Yoast route publishes no OPTIONS schema; the response shape recorded
+    here was read from a live 200 response.
+servers:
+- url: https://kateeva.com/wp-json
+  description: Kateeva WordPress REST API
+tags:
+- name: SEO
+  description: Rendered head metadata and JSON-LD.
+paths:
+  /yoast/v1/get_head:
+    get:
+      operationId: getSeoHead
+      summary: Get rendered SEO head metadata for a kateeva.com URL
+      tags:
+      - SEO
+      description: Returns the Yoast-rendered <head> metadata for any kateeva.com URL together with its parsed JSON-LD
+        schema.org graph — a structured-data view of every page without scraping the HTML. Useful on kateeva.com
+        specifically, because the page bodies are Vue-rendered and largely invisible to a crawler.
+      parameters:
+      - name: url
+        in: query
+        schema:
+          type: string
+        required: true
+      - name: wpml_language
+        in: query
+        schema:
+          type: string
+          enum:
+          - en
+          - ko
+        description: WPML's language code
+      responses:
+        '200':
+          description: Rendered head metadata plus the parsed JSON-LD graph
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SeoHead'
+        '404':
+          description: The URL is not a resolvable kateeva.com URL.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+components:
+  schemas:
+    Error:
+      type: object
+      description: The WordPress REST API error envelope returned on every 4xx/5xx.
+      properties:
+        code:
+          type: string
+          description: Machine-readable error code, e.g. rest_post_invalid_id.
+        message:
+          type: string
+          description: Human-readable error message.
+        data:
+          type: object
+          properties:
+            status:
+              type: integer
+              description: The HTTP status code.
+            params:
+              type: object
+              description: Per-parameter validation messages (rest_invalid_param only).
+      required:
+      - code
+      - message
+    SeoHead:
+      type: object
+      description: Yoast SEO head payload.
+      properties:
+        html:
+          type: string
+          description: The rendered <head> markup for the requested URL.
+        json:
+          type: object
+          description: The same metadata parsed into an object, including the schema.org JSON-LD @graph.

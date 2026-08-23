@@ -1,0 +1,52 @@
+generated: '2026-08-23'
+method: probed
+source: https://kateeva.com/wp-json/
+docs: https://developer.wordpress.org/rest-api/using-the-rest-api/authentication/
+description: >-
+  Kateeva publishes no developer program and issues no API credentials. The WordPress REST content
+  API behind kateeva.com is anonymously readable — no key, token, signature or account is required
+  to read posts, pages, media, taxonomies, search, oEmbed, SEO metadata or the discovery metadata.
+  The server declares exactly one authentication method in its own root document, WordPress
+  application passwords, and that method gates only the write and privileged-read operations that
+  are not part of the public surface.
+summary:
+  types: []
+  anonymous_read: true
+  credentialed_write: true
+  api_key_in: []
+  oauth2_flows: []
+  note: >-
+    No securityScheme appears in any of the eight derived OpenAPI documents because the public
+    surface genuinely has none. This is a recorded absence, not a gap in harvesting.
+schemes: []
+declared_by_server:
+- name: application-passwords
+  type: http
+  scheme: basic
+  description: >-
+    WordPress application passwords (RFC 7617 Basic over TLS, username + generated application
+    password). Declared in the `authentication` block of the API root document. Required for every
+    write method and for privileged reads such as GET /wp/v2/settings. Credentials are issued per
+    WordPress user from the site admin — there is no public registration path, so this is a
+    staff-only credential, not a developer credential.
+  authorization_endpoint: https://kateeva.com/wp-admin/authorize-application.php
+  source: https://kateeva.com/wp-json/
+evidence:
+- url: https://kateeva.com/wp-json/
+  http_status: 200
+  finding: 'authentication: {"application-passwords": {"endpoints": {"authorization": "https://kateeva.com/wp-admin/authorize-application.php"}}}'
+- url: https://kateeva.com/wp-json/wp/v2/posts?per_page=1
+  http_status: 200
+  finding: 'Anonymous read succeeds; response carries `Allow: GET`, confirming read-only anonymous access. X-WP-Total 152.'
+- url: https://kateeva.com/wp-json/wp/v2/media?per_page=1
+  http_status: 200
+  finding: Anonymous read of the media library succeeds, X-WP-Total 236.
+- url: https://kateeva.com/wp-json/wp/v2/settings
+  http_status: 401
+  finding: '{"code":"rest_forbidden","message":"Sorry, you are not allowed to do that.","data":{"status":401}}'
+- url: https://kateeva.com/wp-json/contact-form-7/v1/contact-forms
+  http_status: 403
+  finding: The Contact Form 7 admin surface is credential-gated and is not part of the public read surface.
+x-evidence:
+  fetched: '2026-08-23'
+  probes: 5

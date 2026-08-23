@@ -1,0 +1,89 @@
+generated: '2026-08-23'
+method: probed
+source: https://kateeva.com/wp-json/ + live header observation + DNS probes
+description: >-
+  Kateeva publishes no versioning policy, no deprecation policy, no SLA and no status page for the
+  content API behind kateeva.com. Everything below is what could be observed; the absences are the
+  finding.
+versioning:
+  scheme: uri-path namespace
+  current: wp/v2
+  namespaces_registered: 17
+  docs: null
+  detail: >-
+    The version is a path namespace inherited from WordPress core and its plugins, not a contract
+    Kateeva maintains. It changes when the site is upgraded, on the site owner's schedule, with no
+    announcement channel.
+deprecation:
+  policy_url: null
+  sunset_header: false
+  deprecation_header: false
+  detail: >-
+    No RFC 8594 Sunset or Deprecation header was observed on any response, and no deprecation
+    policy is published. A route can disappear when a plugin is deactivated — the wpml, yoast,
+    filebird, mailpoet, redirection, wp-rocket, cookieyes, contact-form-7 and otgs namespaces that
+    make up roughly 170 of the 271 routes are plugin-provided and are under no stability commitment
+    to third parties.
+sla:
+  url: null
+  uptime_target: null
+status_page:
+  url: null
+  detail: >-
+    No status page exists. status.kateeva.com does not resolve (NXDOMAIN), and no third-party
+    status host is linked from the site. No StatusPage pointer is emitted in apis.yml.
+changelog:
+  url: null
+  detail: >-
+    No API changelog. The nearest dated public signal is the newsroom archive (152 posts) and its
+    RSS feed at https://kateeva.com/feed/, which covers company news rather than API change. No
+    ChangeLog pointer is emitted in apis.yml, because a company newsroom is not a change log for
+    this API.
+support:
+  api_support_channel: null
+  general_contact: https://kateeva.com/contact/
+  detail: >-
+    The contact page is a Contact Form 7 form for sales and general enquiry. There is no developer
+    support channel, no forum, no help center and no Support pointer to emit.
+content_freshness:
+  latest_post_date: '2024-07-01'
+  latest_page_modified: '2025-07-18'
+  detail: >-
+    The newsroom's most recent post is dated 2024-07-01 and the page sitemap's newest lastmod is
+    2025-07-18. The API is live and current, but the content behind it has not been added to in
+    over a year — an agent consuming this surface for company news should expect a stale corpus,
+    not a stream.
+regional_hosts:
+  - host: kateeva.cn
+    status: live
+    detail: 'Chinese-language WordPress site, also serving a public /wp-json/ (HTTP 200). Not profiled separately here.'
+  - host: kateeva.kr
+    status: unreachable
+    detail: >-
+      Linked from the kateeva.com language switcher and declared as the ko hreflang alternate.
+      Resolves to 205.186.187.68 but every HTTPS request timed out during this pass. A live link on
+      the homepage points at a host that does not answer.
+deprecated_operations: []
+stability_assessment:
+  grade: unmanaged
+  detail: >-
+    Consume defensively. This is a marketing site's CMS API with no versioning commitment, no
+    deprecation notice period, no status page and no support channel. The 21 documented operations
+    all sit in core wp/v2, oembed/1.0 and yoast/v1 — the core wp/v2 ones are the most stable, the
+    Yoast SEO endpoint is plugin-provided and can vanish on a plugin change.
+evidence:
+- url: https://kateeva.com/wp-json/
+  http_status: 200
+  finding: 271 routes across 17 namespaces; no versioning or deprecation metadata.
+- host: status.kateeva.com
+  dns: NXDOMAIN
+  finding: No status page host.
+- url: https://kateeva.com/wp-json/wp/v2/posts?per_page=2
+  http_status: 200
+  finding: 'No Sunset or Deprecation response header. Latest post date 2024-07-01.'
+- url: https://kateeva.com/page-sitemap.xml
+  http_status: 200
+  finding: 29 pages; newest lastmod 2025-07-18.
+- url: https://kateeva.kr/
+  http_status: null
+  finding: Connection timed out. Host is linked from kateeva.com but does not answer.

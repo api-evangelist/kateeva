@@ -1,0 +1,55 @@
+generated: '2026-08-23'
+method: probed
+source: live probes of https://kateeva.com/.well-known/* and https://kateeva.cn/.well-known/*
+hit_count: 0
+note: >-
+  Every /.well-known/ path probed returned a real 404 with the site's own 404 page — not a soft 200
+  shell. A control probe of a nonsense path (/.well-known/this-path-should-not-exist-12345) also
+  returned 404, which proves the host is not a catch-all and that these are honest absences rather
+  than a detection failure. kateeva.com serves no RFC 8615 discovery surface of any kind. No
+  WellKnown and no SecurityTxt pointer is emitted in apis.yml, because a pointer would assert that
+  the provider serves a surface it does not serve.
+hosts:
+- host: https://kateeva.com
+  documents:
+  - {path: /.well-known/security.txt, status: 404, content_type: text/html, file: null}
+  - {path: /.well-known/openid-configuration, status: 404, content_type: text/html, file: null}
+  - {path: /.well-known/oauth-authorization-server, status: 404, content_type: text/html, file: null}
+  - {path: /.well-known/api-catalog, status: 404, content_type: text/html, file: null}
+  - {path: /.well-known/ai-plugin.json, status: 404, content_type: text/html, file: null}
+  - {path: /.well-known/agent-card.json, status: 404, content_type: text/html, file: null}
+  - {path: /.well-known/agent.json, status: 404, content_type: text/html, file: null}
+  - {path: /.well-known/mcp.json, status: 404, content_type: text/html, file: null}
+- host: https://kateeva.cn
+  documents:
+  - {path: /.well-known/security.txt, status: 404, content_type: text/html, file: null}
+  - {path: /.well-known/agent-card.json, status: 404, content_type: text/html, file: null}
+  - {path: /.well-known/agent.json, status: 404, content_type: text/html, file: null}
+soft_404_control:
+  path: /.well-known/this-path-should-not-exist-12345
+  status: 404
+  bytes: 77341
+  finding: >-
+    Identical byte count to every other 404 above, and a genuine 404 status. The host does not
+    answer 200 for unregistered /.well-known/ paths, so no probe here is a false negative.
+related_probes:
+- {path: /llms.txt, status: 404, note: No provider-published llms.txt; a generated one is in llms/.}
+- {path: /robots.txt, status: 200, bytes: 0, note: 'Served but empty — zero bytes. Nothing is disallowed and no sitemap is declared, so nothing in this pass was blocked by robots.'}
+- {path: /sitemap.xml, status: 200, note: '302 to a Yoast sitemap index with 6 child sitemaps; 29 pages, 152 posts.'}
+- {path: /openapi.json, status: 404, note: Probed on the site root, the API host root and the docs host — all the same host here.}
+- {path: /graphql, status: 404, note: No GraphQL surface.}
+- {path: /mcp, status: 404, note: No MCP endpoint.}
+- {path: '/?wsdl', status: 200, note: 'Returns the site HTML with the query parameter ignored — not a SOAP contract. Same for /services/?wsdl.'}
+subdomains_checked:
+- {host: api.kateeva.com, dns: NXDOMAIN}
+- {host: docs.kateeva.com, dns: NXDOMAIN}
+- {host: developer.kateeva.com, dns: NXDOMAIN}
+- {host: developers.kateeva.com, dns: NXDOMAIN}
+- {host: app.kateeva.com, dns: NXDOMAIN}
+- {host: mcp.kateeva.com, dns: NXDOMAIN}
+- {host: status.kateeva.com, dns: NXDOMAIN}
+- {host: trust.kateeva.com, dns: NXDOMAIN}
+- {host: portal.kateeva.com, dns: NXDOMAIN}
+- {host: support.kateeva.com, dns: NXDOMAIN}
+- {host: partners.kateeva.com, dns: NXDOMAIN}
+- {host: agent.kateeva.com, dns: NXDOMAIN}

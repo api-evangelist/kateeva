@@ -1,0 +1,28 @@
+generated: '2026-08-23'
+method: searched
+source: https://kateeva.com/page-sitemap.xml
+plan_count: 0
+note: >-
+  Kateeva sells inkjet printing systems to display panel manufacturers — capital equipment with a
+  sales cycle, not API access. There is no pricing page, no plans page, no signup and no self-serve
+  checkout anywhere on kateeva.com: the page sitemap lists 29 pages and none of them is a pricing,
+  plans, shop or checkout page. Commercial engagement runs through the contact form and the
+  regional sales offices. The content API documented in this repo is incidental WordPress
+  infrastructure that is free and unmetered because nobody is selling it. plan_count is 0 as a
+  recorded fact, not an unchecked field.
+plans: []
+commercial_model: contact-for-quote (capital equipment)
+contact: https://kateeva.com/contact/
+evidence:
+- url: https://kateeva.com/page-sitemap.xml
+  http_status: 200
+  finding: 29 pages; no /pricing, /plans, /shop, /checkout or /signup entry.
+- url: https://kateeva.com/contact/
+  http_status: 200
+  finding: Contact Form 7 enquiry form; the only commercial entry point on the site.
+- url: https://kateeva.com/solutions/products/
+  http_status: 200
+  finding: YIELDjet Lassen, Jarvis, Tioga and Kuna product pages carry no prices.
+- url: https://kateeva.com/services/
+  http_status: 200
+  finding: Service offering page; no rate card or plan tiers.

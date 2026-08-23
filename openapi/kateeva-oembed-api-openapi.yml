@@ -1,0 +1,127 @@
+openapi: 3.1.0
+info:
+  title: Kateeva oEmbed API
+  version: wp/v2
+  description: Public oEmbed 1.0 provider endpoint for kateeva.com URLs, returning embeddable rich metadata — title,
+    author, thumbnail and iframe HTML — for any post or page on the site. Verified live against the YIELDjet platform
+    page.
+  contact:
+    name: Kateeva
+    url: https://kateeva.com/contact/
+  x-derived-from: https://kateeva.com/wp-json/ route index + per-route HTTP OPTIONS schema documents
+  x-derived-on: '2026-08-23'
+  x-api-evangelist-note: Third-party profile. Kateeva is an OLED display manufacturing equipment maker and publishes
+    no developer program; this documents the anonymously readable WordPress REST content API behind kateeva.com.
+    Every path, parameter and schema here was read from the server's own published route index and OPTIONS documents
+    on 2026-08-23 — nothing is invented. The oEmbed route publishes no OPTIONS schema; the response shape recorded
+    here was read from a live 200 response.
+servers:
+- url: https://kateeva.com/wp-json
+  description: Kateeva WordPress REST API
+tags:
+- name: oEmbed
+  description: oEmbed 1.0 provider endpoint.
+paths:
+  /oembed/1.0/embed:
+    get:
+      operationId: getOEmbed
+      summary: Get oEmbed rich metadata for a kateeva.com URL
+      tags:
+      - oEmbed
+      description: oEmbed 1.0 provider endpoint for kateeva.com URLs, returning embeddable rich metadata — title,
+        author, provider, thumbnail and iframe HTML — for any post or page.
+      parameters:
+      - name: format
+        in: query
+        schema:
+          default: json
+      - name: maxwidth
+        in: query
+        schema:
+          default: 600
+      - name: url
+        in: query
+        schema:
+          type: string
+          format: uri
+        description: The URL of the resource for which to fetch oEmbed data.
+        required: true
+      - name: wpml_language
+        in: query
+        schema:
+          type: string
+          enum:
+          - en
+          - ko
+        description: WPML's language code
+      responses:
+        '200':
+          description: oEmbed 1.0 rich response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OEmbedResponse'
+        '404':
+          description: The URL does not belong to this site — oembed_invalid_url.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+components:
+  schemas:
+    Error:
+      type: object
+      description: The WordPress REST API error envelope returned on every 4xx/5xx.
+      properties:
+        code:
+          type: string
+          description: Machine-readable error code, e.g. rest_post_invalid_id.
+        message:
+          type: string
+          description: Human-readable error message.
+        data:
+          type: object
+          properties:
+            status:
+              type: integer
+              description: The HTTP status code.
+            params:
+              type: object
+              description: Per-parameter validation messages (rest_invalid_param only).
+      required:
+      - code
+      - message
+    OEmbedResponse:
+      type: object
+      description: oEmbed 1.0 rich-type response.
+      properties:
+        version:
+          type: string
+        provider_name:
+          type: string
+        provider_url:
+          type: string
+          format: uri
+        author_name:
+          type: string
+        author_url:
+          type: string
+          format: uri
+        title:
+          type: string
+        type:
+          type: string
+        width:
+          type: integer
+        height:
+          type: integer
+        html:
+          type: string
+          description: The iframe embed markup.
+        thumbnail_url:
+          type: string
+          format: uri
+        thumbnail_width:
+          type: integer
+        thumbnail_height:
+          type: integer

@@ -1,0 +1,36 @@
+generated: '2026-08-23'
+method: searched
+source: npm registry search, PyPI, GitHub search + GitHub user/org API
+package_count: 0
+official_package_count: 0
+note: >-
+  Kateeva publishes no client libraries. Searched npm, PyPI and GitHub on 2026-08-23 and found no
+  first-party package under any Kateeva name. There is no SDK to date-check, so there is no
+  abandonment signal to read here either — this is the absence of a program, not a decayed one. The
+  content API this repo documents is plain HTTP + JSON and needs no client library. Every entry
+  below records version: null with the reason, because "checked, nothing to record" and "not
+  checked" are different facts.
+packages: []
+registries_checked:
+- {registry: npm, query: kateeva, results: 0, version: null, published: null, url: 'https://registry.npmjs.org/-/v1/search?text=kateeva', http_status: 200, note: Zero packages match; nothing to version.}
+- {registry: pypi, query: kateeva, results: 0, version: null, published: null, url: https://pypi.org/pypi/kateeva/json, http_status: 404, note: No project by that name.}
+- {registry: github, query: kateeva, results: 0, version: null, published: null, url: 'https://api.github.com/search/repositories?q=kateeva', http_status: 200, note: '4 repository matches, none owned by the company — see rejected_leads.'}
+- {registry: github-org, query: kateeva, results: 0, version: null, published: null, url: https://api.github.com/orgs/kateeva, http_status: 404, note: No GitHub Organization named kateeva exists.}
+rejected_leads:
+- kind: github-user
+  url: https://github.com/kateeva
+  http_status: 200
+  type: User
+  public_repos: 1
+  created: '2021-10-15'
+  official: false
+  note: >-
+    github.com/kateeva is a personal GitHub USER account, not an Organization. It carries no name,
+    company, blog, location or bio linking it to Kateeva Inc., and its single repository is
+    unrelated to display equipment. No GitHubOrganization pointer is emitted in apis.yml — a
+    same-name personal account is not evidence of a company code presence, and claiming it would
+    credit Kateeva with a public repository surface it does not have.
+- kind: github-repos
+  urls: [https://github.com/katemarieevans/KateEvans, https://github.com/katemarieevans/KateEvansIS, https://github.com/katemarieevans/KateEvansISproject]
+  official: false
+  note: Substring matches on a person's name ("Kate Evans"), unrelated to the company.

@@ -1,0 +1,761 @@
+openapi: 3.1.0
+info:
+  title: Kateeva Discovery API
+  version: wp/v2
+  description: Public, unauthenticated discovery metadata for kateeva.com — the self-describing route index (271
+    routes across 17 namespaces at capture), the registered content types and taxonomies, the publication statuses,
+    the public author records and the comment surface. This is the surface that makes the rest of the API machine-readable
+    without any published documentation.
+  contact:
+    name: Kateeva
+    url: https://kateeva.com/contact/
+  x-derived-from: https://kateeva.com/wp-json/ route index + per-route HTTP OPTIONS schema documents
+  x-derived-on: '2026-08-23'
+  x-api-evangelist-note: Third-party profile. Kateeva is an OLED display manufacturing equipment maker and publishes
+    no developer program; this documents the anonymously readable WordPress REST content API behind kateeva.com.
+    Every path, parameter and schema here was read from the server's own published route index and OPTIONS documents
+    on 2026-08-23 — nothing is invented.
+servers:
+- url: https://kateeva.com/wp-json
+  description: Kateeva WordPress REST API
+tags:
+- name: Discovery
+  description: Route index, content types, taxonomies, statuses, authors and comments.
+paths:
+  /:
+    get:
+      operationId: getRouteIndex
+      summary: Get the API route index
+      tags:
+      - Discovery
+      description: 'Retrieve the self-describing WordPress REST root document for kateeva.com: site name, home URL,
+        the supported authentication schemes, the 17 registered namespaces and all 271 routes with their methods
+        and arguments. This is the document that makes the rest of the surface machine-readable in the absence of
+        any published documentation.'
+      responses:
+        '200':
+          description: Get the API route index
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          description: Invalid parameter(s) — rest_invalid_param.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /wp/v2/types:
+    get:
+      operationId: listTypes
+      summary: List content types
+      tags:
+      - Discovery
+      description: Retrieve every registered content type on kateeva.com (post, page, attachment, plus the WordPress
+        internal types) with its REST base and namespace.
+      responses:
+        '200':
+          description: List content types
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          description: Invalid parameter(s) — rest_invalid_param.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /wp/v2/taxonomies:
+    get:
+      operationId: listTaxonomies
+      summary: List taxonomies
+      tags:
+      - Discovery
+      description: Retrieve every registered taxonomy — categories, tags, navigation menus and pattern categories
+        — with the content types each applies to.
+      responses:
+        '200':
+          description: List taxonomies
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          description: Invalid parameter(s) — rest_invalid_param.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /wp/v2/statuses:
+    get:
+      operationId: listStatuses
+      summary: List publication statuses
+      tags:
+      - Discovery
+      description: Retrieve the publication statuses exposed to anonymous callers (publish).
+      responses:
+        '200':
+          description: List publication statuses
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          description: Invalid parameter(s) — rest_invalid_param.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /wp/v2/users:
+    get:
+      operationId: listUsers
+      summary: List public authors
+      tags:
+      - Discovery
+      description: Retrieve the public author records that have published content on kateeva.com (2 at capture).
+        Email addresses and roles are not exposed to anonymous callers.
+      parameters:
+      - name: capabilities
+        in: query
+        schema:
+          type: array
+          items:
+            type: string
+        description: Limit result set to users matching at least one specific capability provided. Accepts csv list
+          or single capability.
+      - name: context
+        in: query
+        schema:
+          type: string
+          enum:
+          - view
+          - embed
+          - edit
+          default: view
+        description: Scope under which the request is made; determines fields present in response.
+      - name: exclude
+        in: query
+        schema:
+          type: array
+          items:
+            type: integer
+          default: []
+        description: Ensure result set excludes specific IDs.
+      - name: has_published_posts
+        in: query
+        schema:
+          type: boolean
+          items:
+            type: string
+            enum:
+              post: post
+              page: page
+              attachment: attachment
+              nav_menu_item: nav_menu_item
+              wp_block: wp_block
+              wp_template: wp_template
+              wp_template_part: wp_template_part
+              wp_navigation: wp_navigation
+              wp_font_family: wp_font_family
+              wp_font_face: wp_font_face
+        description: Limit result set to users who have published posts.
+      - name: include
+        in: query
+        schema:
+          type: array
+          items:
+            type: integer
+          default: []
+        description: Limit result set to specific IDs.
+      - name: offset
+        in: query
+        schema:
+          type: integer
+        description: Offset the result set by a specific number of items.
+      - name: order
+        in: query
+        schema:
+          type: string
+          enum:
+          - asc
+          - desc
+          default: asc
+        description: Order sort attribute ascending or descending.
+      - name: orderby
+        in: query
+        schema:
+          type: string
+          enum:
+          - id
+          - include
+          - name
+          - registered_date
+          - slug
+          - include_slugs
+          - email
+          - url
+          default: name
+        description: Sort collection by user attribute.
+      - name: page
+        in: query
+        schema:
+          type: integer
+          default: 1
+          minimum: 1
+        description: Current page of the collection.
+      - name: per_page
+        in: query
+        schema:
+          type: integer
+          default: 10
+          minimum: 1
+          maximum: 100
+        description: Maximum number of items to be returned in result set.
+      - name: roles
+        in: query
+        schema:
+          type: array
+          items:
+            type: string
+        description: Limit result set to users matching at least one specific role provided. Accepts csv list or
+          single role.
+      - name: search
+        in: query
+        schema:
+          type: string
+        description: Limit results to those matching a string.
+      - name: slug
+        in: query
+        schema:
+          type: array
+          items:
+            type: string
+        description: Limit result set to users with one or more specific slugs.
+      - name: who
+        in: query
+        schema:
+          type: string
+          enum:
+          - authors
+        description: Limit result set to users who are considered authors.
+      - name: wpml_language
+        in: query
+        schema:
+          type: string
+          enum:
+          - en
+          - ko
+        description: WPML's language code
+      responses:
+        '200':
+          description: List users
+          headers:
+            X-WP-Total:
+              description: Total number of records matching the query.
+              schema:
+                type: integer
+            X-WP-TotalPages:
+              description: Total number of pages available at the current per_page.
+              schema:
+                type: integer
+            Link:
+              description: RFC 8288 pagination links (rel="next" / rel="prev").
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+        '400':
+          description: Invalid parameter(s) — rest_invalid_param.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Authentication required or insufficient permission — rest_forbidden.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /wp/v2/users/{id}:
+    get:
+      operationId: getUser
+      summary: Get public author
+      tags:
+      - Discovery
+      description: Retrieve a single Kateeva user by its numeric WordPress ID.
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: Unique identifier for the user.
+        schema:
+          type: integer
+      - name: context
+        in: query
+        schema:
+          type: string
+          enum:
+          - view
+          - embed
+          - edit
+          default: view
+        description: Scope under which the request is made; determines fields present in response.
+      - name: wpml_language
+        in: query
+        schema:
+          type: string
+          enum:
+          - en
+          - ko
+        description: WPML's language code
+      responses:
+        '200':
+          description: A single user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: Invalid parameter(s) — rest_invalid_param.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: No user exists with that ID — rest_post_invalid_id.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /wp/v2/comments:
+    get:
+      operationId: listComments
+      summary: List comments
+      tags:
+      - Discovery
+      description: Retrieve a paginated collection of published Kateeva comments (1 at capture).
+      parameters:
+      - name: after
+        in: query
+        schema:
+          type: string
+          format: date-time
+        description: Limit response to comments published after a given ISO8601 compliant date.
+      - name: author
+        in: query
+        schema:
+          type: array
+          items:
+            type: integer
+        description: Limit result set to comments assigned to specific user IDs. Requires authorization.
+      - name: author_email
+        in: query
+        schema:
+          type: string
+          format: email
+          default: null
+        description: Limit result set to that from a specific author email. Requires authorization.
+      - name: author_exclude
+        in: query
+        schema:
+          type: array
+          items:
+            type: integer
+        description: Ensure result set excludes comments assigned to specific user IDs. Requires authorization.
+      - name: before
+        in: query
+        schema:
+          type: string
+          format: date-time
+        description: Limit response to comments published before a given ISO8601 compliant date.
+      - name: context
+        in: query
+        schema:
+          type: string
+          enum:
+          - view
+          - embed
+          - edit
+          default: view
+        description: Scope under which the request is made; determines fields present in response.
+      - name: exclude
+        in: query
+        schema:
+          type: array
+          items:
+            type: integer
+          default: []
+        description: Ensure result set excludes specific IDs.
+      - name: include
+        in: query
+        schema:
+          type: array
+          items:
+            type: integer
+          default: []
+        description: Limit result set to specific IDs.
+      - name: offset
+        in: query
+        schema:
+          type: integer
+        description: Offset the result set by a specific number of items.
+      - name: order
+        in: query
+        schema:
+          type: string
+          enum:
+          - asc
+          - desc
+          default: desc
+        description: Order sort attribute ascending or descending.
+      - name: orderby
+        in: query
+        schema:
+          type: string
+          enum:
+          - date
+          - date_gmt
+          - id
+          - include
+          - post
+          - parent
+          - type
+          default: date_gmt
+        description: Sort collection by comment attribute.
+      - name: page
+        in: query
+        schema:
+          type: integer
+          default: 1
+          minimum: 1
+        description: Current page of the collection.
+      - name: parent
+        in: query
+        schema:
+          type: array
+          items:
+            type: integer
+          default: []
+        description: Limit result set to comments of specific parent IDs.
+      - name: parent_exclude
+        in: query
+        schema:
+          type: array
+          items:
+            type: integer
+          default: []
+        description: Ensure result set excludes specific parent IDs.
+      - name: password
+        in: query
+        schema:
+          type: string
+        description: The password for the post if it is password protected.
+      - name: per_page
+        in: query
+        schema:
+          type: integer
+          default: 10
+          minimum: 1
+          maximum: 100
+        description: Maximum number of items to be returned in result set.
+      - name: post
+        in: query
+        schema:
+          type: array
+          items:
+            type: integer
+          default: []
+        description: Limit result set to comments assigned to specific post IDs.
+      - name: search
+        in: query
+        schema:
+          type: string
+        description: Limit results to those matching a string.
+      - name: status
+        in: query
+        schema:
+          type: string
+          default: approve
+        description: Limit result set to comments assigned a specific status. Requires authorization.
+      - name: type
+        in: query
+        schema:
+          type: string
+          default: comment
+        description: Limit result set to comments assigned a specific type. Requires authorization.
+      - name: wpml_language
+        in: query
+        schema:
+          type: string
+          enum:
+          - en
+          - ko
+        description: WPML's language code
+      responses:
+        '200':
+          description: List comments
+          headers:
+            X-WP-Total:
+              description: Total number of records matching the query.
+              schema:
+                type: integer
+            X-WP-TotalPages:
+              description: Total number of pages available at the current per_page.
+              schema:
+                type: integer
+            Link:
+              description: RFC 8288 pagination links (rel="next" / rel="prev").
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Comment'
+        '400':
+          description: Invalid parameter(s) — rest_invalid_param.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Authentication required or insufficient permission — rest_forbidden.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /wp/v2/comments/{id}:
+    get:
+      operationId: getComment
+      summary: Get comment
+      tags:
+      - Discovery
+      description: Retrieve a single Kateeva comment by its numeric WordPress ID.
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: Unique identifier for the comment.
+        schema:
+          type: integer
+      - name: context
+        in: query
+        schema:
+          type: string
+          enum:
+          - view
+          - embed
+          - edit
+          default: view
+        description: Scope under which the request is made; determines fields present in response.
+      - name: password
+        in: query
+        schema:
+          type: string
+        description: The password for the parent post of the comment (if the post is password protected).
+      - name: wpml_language
+        in: query
+        schema:
+          type: string
+          enum:
+          - en
+          - ko
+        description: WPML's language code
+      responses:
+        '200':
+          description: A single comment
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Comment'
+        '400':
+          description: Invalid parameter(s) — rest_invalid_param.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: No comment exists with that ID — rest_post_invalid_id.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+components:
+  schemas:
+    Comment:
+      type: object
+      title: comment
+      properties:
+        id:
+          type: integer
+          description: Unique identifier for the comment.
+          readOnly: true
+        author:
+          type: integer
+          description: The ID of the user object, if author was a user.
+        author_email:
+          type: string
+          format: email
+          description: Email address for the comment author.
+        author_ip:
+          type: string
+          format: ip
+          description: IP address for the comment author.
+        author_name:
+          type: string
+          description: Display name for the comment author.
+        author_url:
+          type: string
+          format: uri
+          description: URL for the comment author.
+        author_user_agent:
+          type: string
+          description: User agent for the comment author.
+        content:
+          type: object
+          description: The content for the comment.
+          properties:
+            raw:
+              type: string
+              description: Content for the comment, as it exists in the database.
+            rendered:
+              type: string
+              description: HTML content for the comment, transformed for display.
+        date:
+          type: string
+          format: date-time
+          description: The date the comment was published, in the site's timezone.
+        date_gmt:
+          type: string
+          format: date-time
+          description: The date the comment was published, as GMT.
+        link:
+          type: string
+          format: uri
+          description: URL to the comment.
+          readOnly: true
+        parent:
+          type: integer
+          description: The ID for the parent of the comment.
+        post:
+          type: integer
+          description: The ID of the associated post object.
+        status:
+          type: string
+          description: State of the comment.
+        type:
+          type: string
+          description: Type of the comment.
+          readOnly: true
+        meta:
+          type: object
+          description: Meta fields.
+    Error:
+      type: object
+      description: The WordPress REST API error envelope returned on every 4xx/5xx.
+      properties:
+        code:
+          type: string
+          description: Machine-readable error code, e.g. rest_post_invalid_id.
+        message:
+          type: string
+          description: Human-readable error message.
+        data:
+          type: object
+          properties:
+            status:
+              type: integer
+              description: The HTTP status code.
+            params:
+              type: object
+              description: Per-parameter validation messages (rest_invalid_param only).
+      required:
+      - code
+      - message
+    User:
+      type: object
+      title: user
+      properties:
+        id:
+          type: integer
+          description: Unique identifier for the user.
+          readOnly: true
+        username:
+          type: string
+          description: Login name for the user.
+        name:
+          type: string
+          description: Display name for the user.
+        first_name:
+          type: string
+          description: First name for the user.
+        last_name:
+          type: string
+          description: Last name for the user.
+        email:
+          type: string
+          format: email
+          description: The email address for the user.
+        url:
+          type: string
+          format: uri
+          description: URL of the user.
+        description:
+          type: string
+          description: Description of the user.
+        link:
+          type: string
+          format: uri
+          description: Author URL of the user.
+          readOnly: true
+        locale:
+          type: string
+          enum:
+          - ''
+          - en_US
+          - ja
+          - ko_KR
+          - zh_CN
+          description: Locale for the user.
+        nickname:
+          type: string
+          description: The nickname for the user.
+        slug:
+          type: string
+          description: An alphanumeric identifier for the user.
+        registered_date:
+          type: string
+          format: date-time
+          description: Registration date for the user.
+          readOnly: true
+        roles:
+          type: array
+          description: Roles assigned to the user.
+          items:
+            type: string
+        password:
+          type: string
+          description: Password for the user (never included).
+        capabilities:
+          type: object
+          description: All capabilities assigned to the user.
+          readOnly: true
+        extra_capabilities:
+          type: object
+          description: Any extra capabilities assigned to the user.
+          readOnly: true
+        meta:
+          type: object
+          description: Meta fields.
+          properties:
+            persisted_preferences:
+              type: object
+        acf:
+          type: object
+          description: ACF field data

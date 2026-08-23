@@ -1,0 +1,194 @@
+openapi: 3.1.0
+info:
+  title: Kateeva Search API
+  version: wp/v2
+  description: Public, unauthenticated cross-content search over kateeva.com — the newsroom archive and the static
+    pages — returning lightweight id / title / url / type / subtype records. 181 objects were searchable at capture.
+  contact:
+    name: Kateeva
+    url: https://kateeva.com/contact/
+  x-derived-from: https://kateeva.com/wp-json/ route index + per-route HTTP OPTIONS schema documents
+  x-derived-on: '2026-08-23'
+  x-api-evangelist-note: Third-party profile. Kateeva is an OLED display manufacturing equipment maker and publishes
+    no developer program; this documents the anonymously readable WordPress REST content API behind kateeva.com.
+    Every path, parameter and schema here was read from the server's own published route index and OPTIONS documents
+    on 2026-08-23 — nothing is invented.
+servers:
+- url: https://kateeva.com/wp-json
+  description: Kateeva WordPress REST API
+tags:
+- name: Search
+  description: Cross-content search across posts and pages.
+paths:
+  /wp/v2/search:
+    get:
+      operationId: searchContent
+      summary: Search site content
+      tags:
+      - Search
+      description: Cross-content search over kateeva.com — posts and pages — returning lightweight id / title /
+        url / type / subtype records (181 searchable objects at capture).
+      parameters:
+      - name: context
+        in: query
+        schema:
+          type: string
+          enum:
+          - view
+          - embed
+          default: view
+        description: Scope under which the request is made; determines fields present in response.
+      - name: exclude
+        in: query
+        schema:
+          type: array
+          items:
+            type: integer
+          default: []
+        description: Ensure result set excludes specific IDs.
+      - name: include
+        in: query
+        schema:
+          type: array
+          items:
+            type: integer
+          default: []
+        description: Limit result set to specific IDs.
+      - name: page
+        in: query
+        schema:
+          type: integer
+          default: 1
+          minimum: 1
+        description: Current page of the collection.
+      - name: per_page
+        in: query
+        schema:
+          type: integer
+          default: 10
+          minimum: 1
+          maximum: 100
+        description: Maximum number of items to be returned in result set.
+      - name: search
+        in: query
+        schema:
+          type: string
+        description: Limit results to those matching a string.
+      - name: subtype
+        in: query
+        schema:
+          type: array
+          items:
+            type: string
+            enum:
+            - post
+            - page
+            - category
+            - post_tag
+            - any
+          default: any
+        description: Limit results to items of one or more object subtypes.
+      - name: type
+        in: query
+        schema:
+          type: string
+          enum:
+          - post
+          - term
+          - post-format
+          default: post
+        description: Limit results to items of an object type.
+      - name: wpml_language
+        in: query
+        schema:
+          type: string
+          enum:
+          - en
+          - ko
+        description: WPML's language code
+      responses:
+        '200':
+          description: Search results
+          headers:
+            X-WP-Total:
+              description: Total number of records matching the query.
+              schema:
+                type: integer
+            X-WP-TotalPages:
+              description: Total number of pages available at the current per_page.
+              schema:
+                type: integer
+            Link:
+              description: RFC 8288 pagination links (rel="next" / rel="prev").
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SearchResult'
+        '400':
+          description: Invalid parameter(s) — rest_invalid_param.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+components:
+  schemas:
+    Error:
+      type: object
+      description: The WordPress REST API error envelope returned on every 4xx/5xx.
+      properties:
+        code:
+          type: string
+          description: Machine-readable error code, e.g. rest_post_invalid_id.
+        message:
+          type: string
+          description: Human-readable error message.
+        data:
+          type: object
+          properties:
+            status:
+              type: integer
+              description: The HTTP status code.
+            params:
+              type: object
+              description: Per-parameter validation messages (rest_invalid_param only).
+      required:
+      - code
+      - message
+    SearchResult:
+      type: object
+      title: search-result
+      properties:
+        id:
+          type: integer
+          description: Unique identifier for the object.
+          readOnly: true
+        title:
+          type: string
+          description: The title for the object.
+          readOnly: true
+        url:
+          type: string
+          format: uri
+          description: URL to the object.
+          readOnly: true
+        type:
+          type: string
+          enum:
+          - post
+          - term
+          - post-format
+          description: Object type.
+          readOnly: true
+        subtype:
+          type: string
+          enum:
+          - post
+          - page
+          - category
+          - post_tag
+          description: Object subtype.
+          readOnly: true

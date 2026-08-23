@@ -1,0 +1,133 @@
+generated: '2026-08-23'
+method: derived
+source: openapi/*.yml + live responses from https://kateeva.com/wp-json/ + probes of kateeva.com
+description: >-
+  Standards conformance assertions for the WordPress REST content API behind kateeva.com. Kateeva
+  publishes no compliance claims, no trust center and no certification list, so every entry below
+  is derived from the contract and from observed responses. Entries with conforms:false are
+  recorded absences, not gaps in checking.
+standards:
+- id: openapi-3.1
+  conforms: true
+  evidence: >-
+    Eight OpenAPI 3.1.0 documents in openapi/ describing 21 operations, derived from the server's
+    own route index and OPTIONS JSON Schema documents. Note this is an API Evangelist artifact —
+    Kateeva does not publish an OpenAPI itself.
+  provenance: api-evangelist-derived
+- id: json-schema
+  conforms: true
+  evidence: >-
+    The server publishes a JSON Schema document per route via HTTP OPTIONS (draft-04 flavour, the
+    WordPress core dialect). Verified 200 with a `schema` key on all 11 wp/v2 routes probed.
+  provenance: provider-published
+- id: rfc8288-web-linking
+  conforms: true
+  evidence: >-
+    Pagination uses an RFC 8288 Link header. Observed on GET /wp/v2/posts?per_page=2 —
+    '<https://kateeva.com/wp-json/wp/v2/posts?per_page=2&page=2>; rel="next"'.
+- id: hal-style-hypermedia
+  conforms: partial
+  evidence: >-
+    Every record carries a `_links` object with self/collection/about/author/wp:term relations and
+    a `curies` block. It is HAL-shaped rather than HAL-compliant (no application/hal+json media
+    type; the media type is application/json).
+- id: oembed-1.0
+  conforms: true
+  evidence: >-
+    GET /oembed/1.0/embed?url=<kateeva.com URL> returned a 200 oEmbed 1.0 rich response for the
+    YIELDjet platform page, including version, provider_name, title, html and thumbnail fields.
+- id: schema-org-json-ld
+  conforms: true
+  evidence: >-
+    GET /yoast/v1/get_head?url=<kateeva.com URL> returned a 200 carrying a parsed schema.org
+    @graph. This is the only structured semantic description of the company's own subject matter
+    on the surface.
+- id: rfc9457-problem-details
+  conforms: false
+  evidence: >-
+    Errors use the WordPress {code, message, data:{status}} envelope served as application/json,
+    not application/problem+json. Observed on 400, 401, 403 and 404 responses.
+- id: rfc9116-security-txt
+  conforms: false
+  evidence: 'GET https://kateeva.com/.well-known/security.txt returned 404 (real HTML 404, not a soft 200).'
+- id: rfc8615-well-known
+  conforms: false
+  evidence: >-
+    All seven /.well-known/ paths probed returned 404, and a control probe of a nonsense
+    /.well-known/ path also returned 404, so the host is not a catch-all. See
+    well-known/kateeva-well-known.yml.
+- id: rfc8594-sunset-header
+  conforms: false
+  evidence: No Sunset or Deprecation header appeared on any observed response.
+- id: oauth2
+  conforms: false
+  evidence: >-
+    No oauth2 securityScheme anywhere on the surface. The only method the server declares is
+    WordPress application passwords (HTTP Basic).
+- id: oidc
+  conforms: false
+  evidence: 'GET /.well-known/openid-configuration returned 404.'
+- id: idempotency
+  conforms: false
+  evidence: >-
+    No Idempotency-Key header or replay contract. Public operations are all GET, which is
+    idempotent by method semantics but is not an idempotency guarantee.
+- id: pagination
+  conforms: true
+  evidence: >-
+    page / per_page / offset with X-WP-Total and X-WP-TotalPages counters. Verified live:
+    X-WP-Total 152, X-WP-TotalPages 76 on the posts collection.
+- id: cors
+  conforms: true
+  evidence: >-
+    Access-Control-Allow-Origin reflects the request Origin with Vary: Origin, and
+    Access-Control-Expose-Headers exposes the two pagination counters and Link.
+- id: asyncapi
+  conforms: false
+  evidence: >-
+    No event, streaming or webhook surface exists. /asyncapi.yaml and /asyncapi.json both 404, and
+    no webhook registration route appears among the 271 routes in the index. N/A rather than a
+    failure — this is a content API on a marketing site.
+- id: grpc-protobuf
+  conforms: false
+  evidence: No .proto is published; there is no Kateeva GitHub organization to search (github.com/kateeva is an unrelated personal account with 1 repo).
+- id: wsdl-soap
+  conforms: false
+  evidence: '?wsdl and ?singleWsdl on kateeva.com return the site HTML with the query parameter ignored (200 text/html), not a SOAP contract.'
+domain_standards:
+  checked: true
+  found: false
+  detail: >-
+    Kateeva's market is display-manufacturing capital equipment, where the relevant machine-facing
+    standards are factory-integration ones — SEMI SECS/GEM (E4/E5/E30), SEMI EDA/Interface A
+    (E120/E125/E132/E134) and OPC UA companion specifications. Those are equipment-floor protocols
+    spoken by a tool on a customer's fab network, not internet-facing APIs, and Kateeva publishes
+    nothing about its tools' host-communication interfaces on its public site — a site-wide search for "SECS" and for "OPC UA"
+    each returned zero results across the 181 searchable posts and pages. No domain
+    standard is asserted, and none is invented to fill the slot: this is reward-only and an absence
+    here is not a penalty.
+  candidates_considered: [SEMI SECS/GEM E4/E5/E30, SEMI EDA Interface A E120/E125/E132/E134, OPC UA for Machine Tools]
+  evidence:
+  - url: https://kateeva.com/wp-json/wp/v2/search?search=SECS
+    http_status: 200
+    finding: 0 results.
+  - url: https://kateeva.com/wp-json/wp/v2/search?search=OPC%20UA
+    http_status: 200
+    finding: 0 results.
+certifications: []
+compliance_programs: []
+compliance_note: >-
+  No SOC 2, ISO 27001, PCI, HIPAA or FedRAMP claim appears anywhere on kateeva.com, and there is no
+  trust center. No Compliance pointer is emitted in apis.yml, because a pointer would assert a
+  published compliance program that does not exist. The site does carry a GDPR-oriented cookie
+  consent layer (CookieYes) and a privacy policy, which is a privacy notice rather than a
+  certification.
+evidence:
+- url: https://kateeva.com/wp-json/
+  http_status: 200
+- url: https://kateeva.com/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fkateeva.com%2Fsolutions%2Ftechnology%2Fyieldjet-platform%2F
+  http_status: 200
+- url: https://kateeva.com/wp-json/yoast/v1/get_head?url=https%3A%2F%2Fkateeva.com%2Fsolutions%2Fproducts%2F
+  http_status: 200
+- url: https://kateeva.com/.well-known/security.txt
+  http_status: 404

@@ -1,0 +1,117 @@
+# Kateeva
+
+> Kateeva is a Newark, California capital-equipment company that builds YIELDjet inkjet printing
+> systems for manufacturing advanced OLED displays. It sells machines to display panel makers, not
+> software. It publishes NO developer program, NO developer portal, NO SDKs, NO API documentation
+> and NO OpenAPI. The only machine-readable interface on its public surface is the WordPress REST
+> content API behind kateeva.com, documented below by API Evangelist.
+
+Generated: 2026-08-23
+Method: generated (no provider-published llms.txt exists — https://kateeva.com/llms.txt returned 404)
+Profile: https://github.com/api-evangelist/kateeva
+
+## What this is, and what it is not
+
+This is a third-party profile. The API described here is the CMS behind a marketing site, exposed
+because WordPress exposes it by default. It is a legitimate, live, anonymously readable content API
+— 152 newsroom posts, 29 pages, 236 media items — and it is genuinely useful for reading what the
+company has published about itself. It is NOT a Kateeva product, it carries no SLA, no versioning
+commitment, no status page and no support channel, and nothing about Kateeva's actual machines
+(YIELDjet Lassen, Jarvis, Tioga, Kuna) is exposed as structured data.
+
+## Base URL
+
+https://kateeva.com/wp-json
+
+## Authentication
+
+None for reads. Anonymous HTTPS; collections answer `Allow: GET`. The server declares WordPress
+application passwords for writes, which have no public issuance path.
+
+## APIs (8 documents, 21 operations)
+
+- Posts API — newsroom archive, 152 posts: openapi/kateeva-posts-api-openapi.yml
+- Pages API — 29 static site pages: openapi/kateeva-pages-api-openapi.yml
+- Media API — 236 attachments: openapi/kateeva-media-api-openapi.yml
+- Taxonomy API — 8 categories, 26 tags: openapi/kateeva-taxonomy-api-openapi.yml
+- Search API — 181 searchable objects: openapi/kateeva-search-api-openapi.yml
+- Discovery API — route index, types, taxonomies, statuses, authors, comments: openapi/kateeva-discovery-api-openapi.yml
+- oEmbed API — oEmbed 1.0 provider endpoint: openapi/kateeva-oembed-api-openapi.yml
+- SEO Metadata API — Yoast head + schema.org JSON-LD: openapi/kateeva-seo-api-openapi.yml
+
+## Start here
+
+GET https://kateeva.com/wp-json/wp/v2/categories?per_page=20&_fields=id,name,slug,count,parent
+
+Category ids are the only reliable retrieval axis: Press releases 9 (53 posts), In the news 11
+(71), Kateeva Blog 13 (19) with children Spotlight on People 14, Spotlight on Technology 15,
+Spotlight on Business 16, Events 12. Tags exist (26) but are barely applied — the highest count is
+5 and several are empty or misspelled.
+
+## The one thing that will surprise you
+
+kateeva.com renders its page bodies client-side with Vue. `content.rendered` is EMPTY for almost
+every page in the Pages API, and the raw HTML is a shell. The company's substance is in two other
+places: the newsroom POSTS (which do carry full `content.rendered`) and the SEO head endpoint
+(`GET /yoast/v1/get_head?url=<page url>`, which returns the schema.org @graph per URL).
+
+## Conventions
+
+- Always send `_fields` — two unfiltered posts are 10.8KB, the same two trimmed are 465 bytes.
+- `per_page` is capped at 100; above that you get 400 `rest_invalid_param`.
+- Pagination: `page` / `per_page` / `offset`, with `X-WP-Total`, `X-WP-TotalPages` and an RFC 8288
+  `Link` header.
+- Errors are the WordPress envelope `{code, message, data:{status}}`, NOT RFC 9457. Match on `code`.
+- No rate-limit headers of any family. No `ETag`, no `Last-Modified`, so no conditional requests.
+- Every response carries `X-Robots-Tag: noindex`.
+- `Cache-Control: max-age=0` — reads are fresh, there is no long edge window.
+
+## Content freshness
+
+The most recent newsroom post is dated 2024-07-01. The newest page modification is 2025-07-18.
+This is a corpus, not a stream. Do not build a "latest news" flow that assumes recency.
+
+## Absences, recorded honestly
+
+- No OpenAPI, GraphQL, gRPC, WSDL or AsyncAPI published by Kateeva.
+- No MCP server. mcp.kateeva.com is NXDOMAIN; /mcp and /.well-known/mcp.json return 404.
+- No A2A agent card. /.well-known/agent-card.json and /.well-known/agent.json both return 404 on
+  kateeva.com and kateeva.cn.
+- No /.well-known/ surface at all: security.txt, openid-configuration, oauth-authorization-server,
+  api-catalog and ai-plugin.json all return 404 (verified against a control probe, so the host is
+  not a catch-all).
+- No SDKs or client libraries on npm, PyPI or GitHub. github.com/kateeva is an unrelated personal
+  account, not the company.
+- No pricing or plans page; no status page; no changelog; no roadmap; no Postman collection.
+- No trust center, no bug bounty, no published certifications.
+- No webhooks and no event surface of any kind.
+
+## Artifacts in this profile
+
+- authentication/kateeva-authentication.yml
+- errors/kateeva-problem-types.yml
+- conventions/kateeva-conventions.yml (includes the reversibility assessment: read-only, na)
+- data-model/kateeva-data-model.yml
+- conformance/kateeva-conformance.yml
+- lifecycle/kateeva-lifecycle.yml
+- rate-limits/kateeva-rate-limits.yml
+- plans/kateeva-plans-pricing.yml
+- examples/kateeva-examples.yml (live captured requests and responses)
+- agentic-access/kateeva-agentic-access.yml
+- mcp/kateeva-mcp.yml (candidate tools; deployment mode none)
+- mcp/kateeva-tool-crosswalk.yml
+- skills/_index.yml (2 packaged agent skills)
+- packages/kateeva-packages.yml
+- well-known/kateeva-well-known.yml
+- security/kateeva-domain-security.yml
+- overlays/ (8 OpenAPI Overlay 1.0.0 documents)
+
+## Company links
+
+- Website: https://kateeva.com/
+- About: https://kateeva.com/company/about/overview/
+- Products: https://kateeva.com/solutions/products/
+- Technology: https://kateeva.com/solutions/technology/yieldjet-platform/
+- Newsroom RSS: https://kateeva.com/feed/
+- Contact: https://kateeva.com/contact/
+- LinkedIn: https://www.linkedin.com/company/kateeva
