@@ -2,6 +2,13 @@
   "repo": "kateeva",
   "feeds": [
     {
+      "source": "https://kateeva.com/company/newsroom/kateeva-blog/",
+      "feed_url": "https://kateeva.com/company/newsroom/kateeva-blog/feed/",
+      "title": "",
+      "saved": 0,
+      "method": "discovered"
+    },
+    {
       "source": "https://kateeva.com/services/",
       "feed_url": "https://kateeva.com/services/feed/",
       "title": "",
@@ -9,13 +16,20 @@
       "method": "discovered"
     },
     {
-      "source": "https://kateeva.com/company/newsroom/kateeva-blog/",
+      "source": "https://kateeva.com/company/newsroom/kateeva-blog/feed/",
       "feed_url": "https://kateeva.com/company/newsroom/kateeva-blog/feed/",
       "title": "",
       "saved": 0,
-      "method": "discovered"
+      "method": "feed"
+    },
+    {
+      "source": "https://kateeva.com/services/feed/",
+      "feed_url": "https://kateeva.com/services/feed/",
+      "title": "",
+      "saved": 0,
+      "method": "feed"
     }
   ],
   "post_count": 0,
-  "fetched": "2026-08-30T22:33:40Z"
+  "fetched": "2026-09-06T19:17:18Z"
 }
