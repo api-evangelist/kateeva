@@ -68,9 +68,9 @@ apis:
 - aid: kateeva:kateeva-posts-api
   name: Kateeva Posts API
   description: >-
-    Public, unauthenticated read access to the Kateeva newsroom archive via the WordPress core REST
-    API — press releases, in-the-news coverage, event notices and the Kateeva Blog. Verified live
-    at 152 published posts.
+    Public, unauthenticated read access to the Kateeva newsroom archive via the WordPress core REST API
+    — press releases, in-the-news coverage, event notices and the Kateeva Blog. Verified live at 152 published
+    posts.
   humanURL: https://kateeva.com/wp-json/
   baseURL: https://kateeva.com/wp-json
   tags:
@@ -97,10 +97,10 @@ apis:
 - aid: kateeva:kateeva-pages-api
   name: Kateeva Pages API
   description: >-
-    Public, unauthenticated read access to the static pages of kateeva.com — Company, About,
-    Leadership, History & Awards, Regions, Sustainability, Solutions, Technology, YIELDjet
-    Platform, Products, Applications, Collaborations, Services, Careers, Newsroom, Contact, Terms
-    of Use and Privacy Policy. Verified live at 29 published pages.
+    Public, unauthenticated read access to the static pages of kateeva.com — Company, About, Leadership,
+    History & Awards, Regions, Sustainability, Solutions, Technology, YIELDjet Platform, Products, Applications,
+    Collaborations, Services, Careers, Newsroom, Contact, Terms of Use and Privacy Policy. Verified live
+    at 29 published pages.
   humanURL: https://kateeva.com/wp-json/
   baseURL: https://kateeva.com/wp-json
   tags:
@@ -126,9 +126,9 @@ apis:
 - aid: kateeva:kateeva-media-api
   name: Kateeva Media API
   description: >-
-    Public, unauthenticated read access to the media library behind kateeva.com — YIELDjet product
-    photography, facility and event imagery, leadership headshots and press assets with their
-    generated size variants. Verified live at 236 attachments.
+    Public, unauthenticated read access to the media library behind kateeva.com — YIELDjet product photography,
+    facility and event imagery, leadership headshots and press assets with their generated size variants.
+    Verified live at 236 attachments.
   humanURL: https://kateeva.com/wp-json/
   baseURL: https://kateeva.com/wp-json
   tags:
@@ -155,10 +155,10 @@ apis:
 - aid: kateeva:kateeva-taxonomy-api
   name: Kateeva Taxonomy API
   description: >-
-    Public, unauthenticated read access to the classification vocabularies behind the kateeva.com
-    newsroom — the eight post categories (Press releases, In the news, Kateeva Blog, Spotlight on
-    People, Spotlight on Technology, Spotlight on Business, Events, Uncategorized) and the 26 post
-    tags that cross-cut them. Verified live at 8 categories and 26 tags.
+    Public, unauthenticated read access to the classification vocabularies behind the kateeva.com newsroom
+    — the eight post categories (Press releases, In the news, Kateeva Blog, Spotlight on People, Spotlight
+    on Technology, Spotlight on Business, Events, Uncategorized) and the 26 post tags that cross-cut them.
+    Verified live at 8 categories and 26 tags.
   humanURL: https://kateeva.com/wp-json/
   baseURL: https://kateeva.com/wp-json
   tags:
@@ -184,9 +184,9 @@ apis:
 - aid: kateeva:kateeva-search-api
   name: Kateeva Search API
   description: >-
-    Public, unauthenticated cross-content search over kateeva.com — the newsroom archive and the
-    static pages — returning lightweight id / title / url / type / subtype records. Verified live
-    at 181 searchable objects.
+    Public, unauthenticated cross-content search over kateeva.com — the newsroom archive and the static
+    pages — returning lightweight id / title / url / type / subtype records. Verified live at 181 searchable
+    objects.
   humanURL: https://kateeva.com/wp-json/
   baseURL: https://kateeva.com/wp-json
   tags:
@@ -210,10 +210,10 @@ apis:
 - aid: kateeva:kateeva-discovery-api
   name: Kateeva Discovery API
   description: >-
-    Public, unauthenticated discovery metadata for kateeva.com — the self-describing route index
-    (271 routes across 17 namespaces at capture), the registered content types and taxonomies, the
-    publication statuses, the public author records and the comment surface. This is the surface
-    that makes the rest of the API machine-readable without any published documentation.
+    Public, unauthenticated discovery metadata for kateeva.com — the self-describing route index (271
+    routes across 17 namespaces at capture), the registered content types and taxonomies, the publication
+    statuses, the public author records and the comment surface. This is the surface that makes the rest
+    of the API machine-readable without any published documentation.
   humanURL: https://kateeva.com/wp-json/
   baseURL: https://kateeva.com/wp-json
   tags:
@@ -234,36 +234,13 @@ apis:
     url: lifecycle/kateeva-lifecycle.yml
   - type: Overlay
     url: overlays/kateeva-discovery-api-overlay.yaml
-- aid: kateeva:kateeva-oembed-api
-  name: Kateeva oEmbed API
-  description: >-
-    Public oEmbed 1.0 provider endpoint for kateeva.com URLs, returning embeddable rich metadata —
-    title, author, provider, thumbnail and iframe HTML — for any post or page on the site.
-  humanURL: https://kateeva.com/wp-json/
-  baseURL: https://kateeva.com/wp-json
-  tags:
-  - oEmbed
-  - Metadata
-  properties:
-  - type: OpenAPI
-    url: openapi/kateeva-oembed-api-openapi.yml
-  - type: Authentication
-    url: authentication/kateeva-authentication.yml
-  - type: ErrorCatalog
-    url: errors/kateeva-problem-types.yml
-  - type: Conventions
-    url: conventions/kateeva-conventions.yml
-  - type: Conformance
-    url: conformance/kateeva-conformance.yml
-  - type: Overlay
-    url: overlays/kateeva-oembed-api-overlay.yaml
 - aid: kateeva:kateeva-seo-api
   name: Kateeva SEO Metadata API
   description: >-
-    Public Yoast SEO head endpoint returning the rendered head metadata and its parsed JSON-LD
-    schema.org graph for any kateeva.com URL — a structured-data view of every page without
-    scraping the HTML. This matters more here than on a typical site, because kateeva.com renders
-    its page bodies client-side with Vue and serves an empty shell to a crawler.
+    Public Yoast SEO head endpoint returning the rendered head metadata and its parsed JSON-LD schema.org
+    graph for any kateeva.com URL — a structured-data view of every page without scraping the HTML. This
+    matters more here than on a typical site, because kateeva.com renders its page bodies client-side
+    with Vue and serves an empty shell to a crawler.
   humanURL: https://kateeva.com/wp-json/
   baseURL: https://kateeva.com/wp-json
   tags:
@@ -283,12 +260,32 @@ apis:
     url: conformance/kateeva-conformance.yml
   - type: Overlay
     url: overlays/kateeva-seo-api-overlay.yaml
+- aid: kateeva:kateeva-o-embed-api
+  name: Kateeva o Embed API
+  description: oEmbed 1.0 provider endpoint.
+  humanURL: https://kateeva.com/wp-json/
+  baseURL: https://kateeva.com/wp-json
+  tags:
+  - o Embed
+  properties:
+  - type: OpenAPI
+    url: openapi/kateeva-o-embed-api-openapi.yml
+  - type: Authentication
+    url: authentication/kateeva-authentication.yml
+  - type: ErrorCatalog
+    url: errors/kateeva-problem-types.yml
+  - type: Conventions
+    url: conventions/kateeva-conventions.yml
+  - type: Conformance
+    url: conformance/kateeva-conformance.yml
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: Overlay
+  url: overlays/kateeva-oembed-api-overlay.yaml
 - type: DomainSecurity
   url: security/kateeva-domain-security.yml
 - type: Website
