@@ -266,6 +266,8 @@ apis:
   humanURL: https://kateeva.com/wp-json/
   baseURL: https://kateeva.com/wp-json
   tags:
+  - oEmbed
+  tags_raw:
   - o Embed
   properties:
   - type: OpenAPI
