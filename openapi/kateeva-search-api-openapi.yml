@@ -1,18 +1,14 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
   title: Kateeva Search API
   version: wp/v2
-  description: Public, unauthenticated cross-content search over kateeva.com — the newsroom archive and the static
-    pages — returning lightweight id / title / url / type / subtype records. 181 objects were searchable at capture.
+  description: Public, unauthenticated cross-content search over kateeva.com — the newsroom archive and the static pages — returning lightweight id / title / url / type / subtype records. 181 objects were searchable at capture.
   contact:
     name: Kateeva
     url: https://kateeva.com/contact/
   x-derived-from: https://kateeva.com/wp-json/ route index + per-route HTTP OPTIONS schema documents
   x-derived-on: '2026-08-23'
-  x-api-evangelist-note: Third-party profile. Kateeva is an OLED display manufacturing equipment maker and publishes
-    no developer program; this documents the anonymously readable WordPress REST content API behind kateeva.com.
-    Every path, parameter and schema here was read from the server's own published route index and OPTIONS documents
-    on 2026-08-23 — nothing is invented.
+  x-api-evangelist-note: Third-party profile. Kateeva is an OLED display manufacturing equipment maker and publishes no developer program; this documents the anonymously readable WordPress REST content API behind kateeva.com. Every path, parameter and schema here was read from the server's own published route index and OPTIONS documents on 2026-08-23 — nothing is invented.
 servers:
 - url: https://kateeva.com/wp-json
   description: Kateeva WordPress REST API
@@ -26,8 +22,7 @@ paths:
       summary: Search site content
       tags:
       - Search
-      description: Cross-content search over kateeva.com — posts and pages — returning lightweight id / title /
-        url / type / subtype records (181 searchable objects at capture).
+      description: Cross-content search over kateeva.com — posts and pages — returning lightweight id / title / url / type / subtype records (181 searchable objects at capture).
       parameters:
       - name: context
         in: query
@@ -136,28 +131,6 @@ paths:
                 $ref: '#/components/schemas/Error'
 components:
   schemas:
-    Error:
-      type: object
-      description: The WordPress REST API error envelope returned on every 4xx/5xx.
-      properties:
-        code:
-          type: string
-          description: Machine-readable error code, e.g. rest_post_invalid_id.
-        message:
-          type: string
-          description: Human-readable error message.
-        data:
-          type: object
-          properties:
-            status:
-              type: integer
-              description: The HTTP status code.
-            params:
-              type: object
-              description: Per-parameter validation messages (rest_invalid_param only).
-      required:
-      - code
-      - message
     SearchResult:
       type: object
       title: search-result
@@ -192,3 +165,25 @@ components:
           - post_tag
           description: Object subtype.
           readOnly: true
+    Error:
+      type: object
+      description: The WordPress REST API error envelope returned on every 4xx/5xx.
+      properties:
+        code:
+          type: string
+          description: Machine-readable error code, e.g. rest_post_invalid_id.
+        message:
+          type: string
+          description: Human-readable error message.
+        data:
+          type: object
+          properties:
+            status:
+              type: integer
+              description: The HTTP status code.
+            params:
+              type: object
+              description: Per-parameter validation messages (rest_invalid_param only).
+      required:
+      - code
+      - message

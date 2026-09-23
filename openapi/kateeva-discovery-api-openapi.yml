@@ -1,20 +1,14 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
   title: Kateeva Discovery API
   version: wp/v2
-  description: Public, unauthenticated discovery metadata for kateeva.com — the self-describing route index (271
-    routes across 17 namespaces at capture), the registered content types and taxonomies, the publication statuses,
-    the public author records and the comment surface. This is the surface that makes the rest of the API machine-readable
-    without any published documentation.
+  description: Public, unauthenticated discovery metadata for kateeva.com — the self-describing route index (271 routes across 17 namespaces at capture), the registered content types and taxonomies, the publication statuses, the public author records and the comment surface. This is the surface that makes the rest of the API machine-readable without any published documentation.
   contact:
     name: Kateeva
     url: https://kateeva.com/contact/
   x-derived-from: https://kateeva.com/wp-json/ route index + per-route HTTP OPTIONS schema documents
   x-derived-on: '2026-08-23'
-  x-api-evangelist-note: Third-party profile. Kateeva is an OLED display manufacturing equipment maker and publishes
-    no developer program; this documents the anonymously readable WordPress REST content API behind kateeva.com.
-    Every path, parameter and schema here was read from the server's own published route index and OPTIONS documents
-    on 2026-08-23 — nothing is invented.
+  x-api-evangelist-note: Third-party profile. Kateeva is an OLED display manufacturing equipment maker and publishes no developer program; this documents the anonymously readable WordPress REST content API behind kateeva.com. Every path, parameter and schema here was read from the server's own published route index and OPTIONS documents on 2026-08-23 — nothing is invented.
 servers:
 - url: https://kateeva.com/wp-json
   description: Kateeva WordPress REST API
@@ -28,10 +22,7 @@ paths:
       summary: Get the API route index
       tags:
       - Discovery
-      description: 'Retrieve the self-describing WordPress REST root document for kateeva.com: site name, home URL,
-        the supported authentication schemes, the 17 registered namespaces and all 271 routes with their methods
-        and arguments. This is the document that makes the rest of the surface machine-readable in the absence of
-        any published documentation.'
+      description: 'Retrieve the self-describing WordPress REST root document for kateeva.com: site name, home URL, the supported authentication schemes, the 17 registered namespaces and all 271 routes with their methods and arguments. This is the document that makes the rest of the surface machine-readable in the absence of any published documentation.'
       responses:
         '200':
           description: Get the API route index
@@ -51,8 +42,7 @@ paths:
       summary: List content types
       tags:
       - Discovery
-      description: Retrieve every registered content type on kateeva.com (post, page, attachment, plus the WordPress
-        internal types) with its REST base and namespace.
+      description: Retrieve every registered content type on kateeva.com (post, page, attachment, plus the WordPress internal types) with its REST base and namespace.
       responses:
         '200':
           description: List content types
@@ -72,8 +62,7 @@ paths:
       summary: List taxonomies
       tags:
       - Discovery
-      description: Retrieve every registered taxonomy — categories, tags, navigation menus and pattern categories
-        — with the content types each applies to.
+      description: Retrieve every registered taxonomy — categories, tags, navigation menus and pattern categories — with the content types each applies to.
       responses:
         '200':
           description: List taxonomies
@@ -113,8 +102,7 @@ paths:
       summary: List public authors
       tags:
       - Discovery
-      description: Retrieve the public author records that have published content on kateeva.com (2 at capture).
-        Email addresses and roles are not exposed to anonymous callers.
+      description: Retrieve the public author records that have published content on kateeva.com (2 at capture). Email addresses and roles are not exposed to anonymous callers.
       parameters:
       - name: capabilities
         in: query
@@ -122,8 +110,7 @@ paths:
           type: array
           items:
             type: string
-        description: Limit result set to users matching at least one specific capability provided. Accepts csv list
-          or single capability.
+        description: Limit result set to users matching at least one specific capability provided. Accepts csv list or single capability.
       - name: context
         in: query
         schema:
@@ -218,8 +205,7 @@ paths:
           type: array
           items:
             type: string
-        description: Limit result set to users matching at least one specific role provided. Accepts csv list or
-          single role.
+        description: Limit result set to users matching at least one specific role provided. Accepts csv list or single role.
       - name: search
         in: query
         schema:
@@ -656,28 +642,6 @@ components:
         meta:
           type: object
           description: Meta fields.
-    Error:
-      type: object
-      description: The WordPress REST API error envelope returned on every 4xx/5xx.
-      properties:
-        code:
-          type: string
-          description: Machine-readable error code, e.g. rest_post_invalid_id.
-        message:
-          type: string
-          description: Human-readable error message.
-        data:
-          type: object
-          properties:
-            status:
-              type: integer
-              description: The HTTP status code.
-            params:
-              type: object
-              description: Per-parameter validation messages (rest_invalid_param only).
-      required:
-      - code
-      - message
     User:
       type: object
       title: user
@@ -759,3 +723,25 @@ components:
         acf:
           type: object
           description: ACF field data
+    Error:
+      type: object
+      description: The WordPress REST API error envelope returned on every 4xx/5xx.
+      properties:
+        code:
+          type: string
+          description: Machine-readable error code, e.g. rest_post_invalid_id.
+        message:
+          type: string
+          description: Human-readable error message.
+        data:
+          type: object
+          properties:
+            status:
+              type: integer
+              description: The HTTP status code.
+            params:
+              type: object
+              description: Per-parameter validation messages (rest_invalid_param only).
+      required:
+      - code
+      - message

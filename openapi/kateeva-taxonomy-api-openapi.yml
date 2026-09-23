@@ -1,19 +1,14 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
   title: Kateeva Taxonomy API
   version: wp/v2
-  description: 'Public, unauthenticated read access to the classification vocabularies behind the kateeva.com newsroom:
-    the eight post categories (Press releases 53, In the news 71, Kateeva Blog 19, Spotlight on People 10, Spotlight
-    on Technology 11, Spotlight on Business 5, Events 3, Uncategorized 1) and the 26 post tags that cross-cut them.'
+  description: 'Public, unauthenticated read access to the classification vocabularies behind the kateeva.com newsroom: the eight post categories (Press releases 53, In the news 71, Kateeva Blog 19, Spotlight on People 10, Spotlight on Technology 11, Spotlight on Business 5, Events 3, Uncategorized 1) and the 26 post tags that cross-cut them.'
   contact:
     name: Kateeva
     url: https://kateeva.com/contact/
   x-derived-from: https://kateeva.com/wp-json/ route index + per-route HTTP OPTIONS schema documents
   x-derived-on: '2026-08-23'
-  x-api-evangelist-note: Third-party profile. Kateeva is an OLED display manufacturing equipment maker and publishes
-    no developer program; this documents the anonymously readable WordPress REST content API behind kateeva.com.
-    Every path, parameter and schema here was read from the server's own published route index and OPTIONS documents
-    on 2026-08-23 — nothing is invented.
+  x-api-evangelist-note: Third-party profile. Kateeva is an OLED display manufacturing equipment maker and publishes no developer program; this documents the anonymously readable WordPress REST content API behind kateeva.com. Every path, parameter and schema here was read from the server's own published route index and OPTIONS documents on 2026-08-23 — nothing is invented.
 servers:
 - url: https://kateeva.com/wp-json
   description: Kateeva WordPress REST API
@@ -413,6 +408,41 @@ paths:
                 $ref: '#/components/schemas/Error'
 components:
   schemas:
+    Tag:
+      type: object
+      title: tag
+      properties:
+        id:
+          type: integer
+          description: Unique identifier for the term.
+          readOnly: true
+        count:
+          type: integer
+          description: Number of published posts for the term.
+          readOnly: true
+        description:
+          type: string
+          description: HTML description of the term.
+        link:
+          type: string
+          format: uri
+          description: URL of the term.
+          readOnly: true
+        name:
+          type: string
+          description: HTML title for the term.
+        slug:
+          type: string
+          description: An alphanumeric identifier for the term unique to its type.
+        taxonomy:
+          type: string
+          enum:
+          - post_tag
+          description: Type attribution for the term.
+          readOnly: true
+        meta:
+          type: object
+          description: Meta fields.
     Category:
       type: object
       title: category
@@ -476,38 +506,3 @@ components:
       required:
       - code
       - message
-    Tag:
-      type: object
-      title: tag
-      properties:
-        id:
-          type: integer
-          description: Unique identifier for the term.
-          readOnly: true
-        count:
-          type: integer
-          description: Number of published posts for the term.
-          readOnly: true
-        description:
-          type: string
-          description: HTML description of the term.
-        link:
-          type: string
-          format: uri
-          description: URL of the term.
-          readOnly: true
-        name:
-          type: string
-          description: HTML title for the term.
-        slug:
-          type: string
-          description: An alphanumeric identifier for the term unique to its type.
-        taxonomy:
-          type: string
-          enum:
-          - post_tag
-          description: Type attribution for the term.
-          readOnly: true
-        meta:
-          type: object
-          description: Meta fields.
