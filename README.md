@@ -64,5 +64,111 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-Kateeva is a company surfaced via the API Evangelist harvest backlog (source: secondary-market) and added to the network as a stub for full-pipeline profiling.
-- https://forgeglobal.com/kateeva_stock/
+Kateeva is a Silicon Valley capital-equipment company that builds inkjet printing systems for manufacturing advanced displays. It was co-founded in 2008 by Conor Madigan, PhD, Valerie Gassend, PhD, and Gerry Chen, PhD, on the conviction that precision inkjet deposition could make OLED displays mass-producible at cost. The company introduced its YIELDjet platform in 2013 — the display industry's first inkjet equipment solution for depositing the organic thin film encapsulation (TFE) layer of an OLED panel — and shipped the first commercial YIELDjet FLEX system a year later, which became the market-leading tool for flexible mobile OLED mass production. Its current product line is the YIELDjet Lassen, Jarvis, Tioga and Kuna printers, spanning substrate sizes and applications from TFE to OLED RGB pixel deposition and microlens planarization. Kateeva moved its global headquarters to Newark, California in 2015 and operates in China, Korea, Japan and Taiwan; it raised roughly $200 million through a 2016 Series E backed by BOE, TCL Capital, Redview Capital, Samsung Venture Investment, Sigma Partners, Spark Capital, Madrone Capital Partners, DBL Partners and Veeco. Kateeva sells machines to display panel makers, not software: it publishes no developer program, no developer portal, no SDKs and no API documentation of any kind. The only machine-readable interface it exposes is the WordPress REST content API behind its corporate website at kateeva.com, which is captured here for discovery purposes and is anonymously readable but read-only.
+
+**Areas:** Company · Display Manufacturing · OLED · Semiconductor Equipment · Capital Equipment · Inkjet Printing · Thin Film Encapsulation · Advanced Manufacturing · Materials Deposition · Consumer Electronics · Hardware
+
+## Kateeva on APIs.io
+
+Everything profiled for Kateeva is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/kateeva/](https://apis.io/providers/kateeva/)** — or go straight to one of the APIs or properties below.
+
+### APIs (1)
+
+- [Kateeva Website (WordPress REST)](https://apis.io/apis/kateeva/kateeva-com-website-wordpress-rest/) — The public WordPress REST API (wp-json) of the Kateeva website at kateeva.com: the route index of the site's content management system, catalogued as one…
+
+### Published properties
+
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
+
+#### MCP servers (1)
+
+Model Context Protocol servers that expose the API to agents.
+
+- [kateeva](https://apis.io/servers/kateeva/kateeva/)
+
+#### Agentic access (1)
+
+Which operations an agent can call, which act, and which need a human in the loop.
+
+- [Kateeva Agentic Access](https://apis.io/agentic-access/kateeva/kateeva-agentic-access/)
+
+#### Security (2)
+
+Authentication, trust centre, and vulnerability disclosure.
+
+- [Kateeva Authentication](https://apis.io/security/kateeva/kateeva-authentication/)
+- [Kateeva Domain Security](https://apis.io/security/kateeva/kateeva-domain-security/)
+
+#### Plans and pricing (1)
+
+Published plans, tiers and prices.
+
+- [Kateeva Plans Pricing](https://apis.io/plans/kateeva/kateeva-plans-pricing/)
+
+#### Rate limits (1)
+
+Published request limits.
+
+- [Kateeva Rate Limits](https://apis.io/rate-limits/kateeva/kateeva-rate-limits/)
+
+## Where to find this API
+
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
+
+- [Website](https://kateeva.com/)
+- [Blog](https://kateeva.com/company/newsroom/kateeva-blog/)
+- [Terms of service](https://kateeva.com/terms-of-use/)
+- [Privacy policy](https://kateeva.com/privacy-policy/)
+
+## API Evangelist rating
+
+**Kin Score 19.5** — emerging · rubric 0.24.0 · scored 2026-10-17
+
+| Facet | Score |
+|---|---|
+| Discoverability | 66.1 |
+| Contract quality | 6.5 |
+| Contract governance | 4.5 |
+| Operational transparency | 0.0 |
+| Developer ergonomics | 25.6 |
+| Access clarity | 21.1 |
+
+**Agent readiness 11.9** — agent-aware
+
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | — |
+| Agentic Access | derived (partial credit) |
+| Reversibility Documented | — |
+| MCP Server | — |
+| Auth Clarity | bearer (partial credit) |
+| Idempotency | — |
+| Error Semantics | documented (partial credit) |
+| OpenAPI Examples | documented (partial credit) |
+| Rate Limit Signal | documented (partial credit) |
+| Event Surface Described | — |
+| Agent Skills | derived (partial credit) |
+| Well Known Catalog | — |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | — |
+| Delegated Identity | — |
+| Protected Resource Metadata | — |
+| Dynamic Client Registration | — |
+| Agentic Commerce | — |
+
+**Regulatory alignment 24.5** — Horizontal (data, software, accessibility, platform)
+
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/kateeva/](https://apis.io/providers/kateeva/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for Kateeva: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/kateeva/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
